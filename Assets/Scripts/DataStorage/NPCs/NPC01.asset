@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d17792f9694eb0549904178501044064, type: 3}
+  m_Name: NPC01
+  m_EditorClassIdentifier: 
+  npcName: Alano
+  ingredientIcon: {fileID: 21300000, guid: 6546ac841dd0e224a813aee67c9a8dc5, type: 3}
+  color1: 
+  color2: 
+  color3: 
+  flavorRequirement: 0
+  dialogues:
+  - speakerName: Alano
+    line: "Hey, you're here. \nToday is your first day at work, so there are a few
+      things I need to mention to you beforehand..."
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: 1
+    nextNodeIndex1: 0
+  - speakerName: Alano
+    line: This place is Nocturne Club, where customers come seeking emotional support.
+      This is exactly what attracts our guests.
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: 2
+    nextNodeIndex1: 0
+  - speakerName: Alano
+    line: You need to observe their moods and adjust the drinks according to their
+      words. The bartending instructions have been written in the brochure.
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: 3
+    nextNodeIndex1: 0
+  - speakerName: Alano
+    line: 'Remember, mood is the key to serving the right drink.  Alright, start
+      your work! '
+    hasOptions: 1
+    optionTexts:
+    - Got it!
+    - Let's start!
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
