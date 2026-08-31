@@ -18,4 +18,10 @@ MonoBehaviour:
   color2: red
   color3: 
   flavorRequirement: 8
-  dialogues: []
+  dialogues:
+  - speakerName: Clara
+    line: 'Clara test Clara test Clara test '
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: 0

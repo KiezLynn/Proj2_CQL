@@ -18,4 +18,10 @@ MonoBehaviour:
   color2: yellow
   color3: 
   flavorRequirement: 4
-  dialogues: []
+  dialogues:
+  - speakerName: Ione
+    line: 'test test test test test test test test '
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: 0

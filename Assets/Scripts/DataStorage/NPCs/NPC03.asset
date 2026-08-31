@@ -18,4 +18,10 @@ MonoBehaviour:
   color2: blue
   color3: 
   flavorRequirement: 6
-  dialogues: []
+  dialogues:
+  - speakerName: Willa
+    line: 'willa test willa test willa test '
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: 0

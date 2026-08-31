@@ -17,7 +17,7 @@ MonoBehaviour:
   color1: 
   color2: 
   color3: 
-  flavorRequirement: 0
+  flavorRequirement: 2
   dialogues:
   - speakerName: Alano
     line: "Hey, you're here. \nToday is your first day at work, so there are a few

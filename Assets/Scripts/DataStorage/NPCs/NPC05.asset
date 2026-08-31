@@ -18,4 +18,10 @@ MonoBehaviour:
   color2: 
   color3: 
   flavorRequirement: 9
-  dialogues: []
+  dialogues:
+  - speakerName: Elara
+    line: 'Elara test Elara test Elara test '
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: 0

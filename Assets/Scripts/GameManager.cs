@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
             NPCData nextNPC = GetRandomCustomer();
             if (nextNPC != null)
             {
+                currentNPC = nextNPC;
                 EnterDialogue(); //开始顾客的对话
             }
         }
@@ -103,9 +104,16 @@ public class GameManager : MonoBehaviour
     public void EnterMixing()
     {
         currentState = GameState.Mixing;
+    
+        // 切换UI面板
         DialoguePan.SetActive(false);
         TiaojiuPan.SetActive(true);
         ResultPan.SetActive(false);
+    
+        // 切换场景背景（隐藏立绘背景，显示调酒桌背景）
+        Scene01.SetActive(false);
+        Scene02.SetActive(true);
+    
         // 重置原料选择
         selectedIngredients.Clear();
         mixManager.Initialize();

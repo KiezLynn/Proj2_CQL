@@ -18,4 +18,10 @@ MonoBehaviour:
   color2: blue
   color3: orange
   flavorRequirement: 5
-  dialogues: []
+  dialogues:
+  - speakerName: Freya
+    line: 'Freya test Freya test Freya test '
+    hasOptions: 0
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: 0
