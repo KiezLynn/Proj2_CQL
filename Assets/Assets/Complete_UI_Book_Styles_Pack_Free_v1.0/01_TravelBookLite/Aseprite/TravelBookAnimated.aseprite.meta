@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -1024,13 +1025,18 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -823325634
+    uuid:
+      value0: 257571510
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 257571510
     name: TravelBookAnimated
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: TravelBookAnimated_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -1039,7 +1045,7 @@ ScriptedImporter:
         width: 30
         height: 30
       spriteId: 3b6e134df1f3cca488665c6f5dfe8a2a
-    - name: TravelBookAnimated_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -1048,7 +1054,7 @@ ScriptedImporter:
         width: 28
         height: 28
       spriteId: 7ebeffbb3818fa747bffacf2c766fb1e
-    - name: TravelBookAnimated_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -1057,7 +1063,7 @@ ScriptedImporter:
         width: 26
         height: 26
       spriteId: d9745fc98bc6a01479bbb9b29db32a2b
-    - name: TravelBookAnimated_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -1066,7 +1072,7 @@ ScriptedImporter:
         width: 28
         height: 28
       spriteId: 5bf3e749351e665458012039b4fd8d9b
-    - name: TravelBookAnimated_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
@@ -1075,7 +1081,7 @@ ScriptedImporter:
         width: 30
         height: 29
       spriteId: 1f28d712b93c6fd4798c65fa28587716
-    - name: TravelBookAnimated_Frame_5
+    - name: Frame_5
       frameIndex: 5
       additiveSortOrder: 0
       cellRect:
@@ -1084,7 +1090,7 @@ ScriptedImporter:
         width: 30
         height: 27
       spriteId: 535ec285470dac94ca54fe12fb4f2110
-    - name: TravelBookAnimated_Frame_6
+    - name: Frame_6
       frameIndex: 6
       additiveSortOrder: 0
       cellRect:
@@ -1093,7 +1099,7 @@ ScriptedImporter:
         width: 30
         height: 28
       spriteId: 8f2a1749e2b04444e85cbc551318aae6
-    - name: TravelBookAnimated_Frame_7
+    - name: Frame_7
       frameIndex: 7
       additiveSortOrder: 0
       cellRect:
@@ -1102,7 +1108,7 @@ ScriptedImporter:
         width: 30
         height: 31
       spriteId: 139617b30f0e596428cb5b16766a36f3
-    - name: TravelBookAnimated_Frame_8
+    - name: Frame_8
       frameIndex: 8
       additiveSortOrder: 0
       cellRect:
@@ -1111,7 +1117,7 @@ ScriptedImporter:
         width: 30
         height: 30
       spriteId: 52a483e5d34775f408fae2169c35e975
-    - name: TravelBookAnimated_Frame_9
+    - name: Frame_9
       frameIndex: 9
       additiveSortOrder: 0
       cellRect:
@@ -1120,7 +1126,7 @@ ScriptedImporter:
         width: 20
         height: 14
       spriteId: cf8e2a4f0220f6f4e90931545eba9b4a
-    - name: TravelBookAnimated_Frame_10
+    - name: Frame_10
       frameIndex: 10
       additiveSortOrder: 0
       cellRect:
@@ -1129,7 +1135,7 @@ ScriptedImporter:
         width: 20
         height: 15
       spriteId: d7f167b2043915e4eaba0acecce083db
-    - name: TravelBookAnimated_Frame_11
+    - name: Frame_11
       frameIndex: 11
       additiveSortOrder: 0
       cellRect:
@@ -1138,7 +1144,7 @@ ScriptedImporter:
         width: 20
         height: 8
       spriteId: a5e5e3921785abd41a1b6fcb69a861fa
-    - name: TravelBookAnimated_Frame_12
+    - name: Frame_12
       frameIndex: 12
       additiveSortOrder: 0
       cellRect:
@@ -1147,7 +1153,7 @@ ScriptedImporter:
         width: 20
         height: 9
       spriteId: 80c126b91ef357a45a9dc1b9da6d7eb5
-    - name: TravelBookAnimated_Frame_13
+    - name: Frame_13
       frameIndex: 13
       additiveSortOrder: 0
       cellRect:
@@ -1156,7 +1162,7 @@ ScriptedImporter:
         width: 20
         height: 9
       spriteId: 0b338c27d65454a49bd46dd84bb45997
-    - name: TravelBookAnimated_Frame_14
+    - name: Frame_14
       frameIndex: 14
       additiveSortOrder: 0
       cellRect:
@@ -1165,7 +1171,7 @@ ScriptedImporter:
         width: 20
         height: 8
       spriteId: 42e0b1255dc0ff240b7a6709e89a3a54
-    - name: TravelBookAnimated_Frame_15
+    - name: Frame_15
       frameIndex: 15
       additiveSortOrder: 0
       cellRect:
@@ -1174,7 +1180,7 @@ ScriptedImporter:
         width: 20
         height: 15
       spriteId: aff9c9d7dd535d7488b946c1b55c13dd
-    - name: TravelBookAnimated_Frame_16
+    - name: Frame_16
       frameIndex: 16
       additiveSortOrder: 0
       cellRect:
@@ -1183,7 +1189,7 @@ ScriptedImporter:
         width: 20
         height: 14
       spriteId: c3e8b166ca9012e46ae65d8c1c765aed
-    - name: TravelBookAnimated_Frame_17
+    - name: Frame_17
       frameIndex: 17
       additiveSortOrder: 0
       cellRect:
@@ -1192,7 +1198,7 @@ ScriptedImporter:
         width: 17
         height: 17
       spriteId: 578c45b6088b51e4ca0512cc4310712a
-    - name: TravelBookAnimated_Frame_18
+    - name: Frame_18
       frameIndex: 18
       additiveSortOrder: 0
       cellRect:
@@ -1201,7 +1207,7 @@ ScriptedImporter:
         width: 19
         height: 19
       spriteId: 53f213b17217ed74db16f6d469e06a6b
-    - name: TravelBookAnimated_Frame_19
+    - name: Frame_19
       frameIndex: 19
       additiveSortOrder: 0
       cellRect:
@@ -1210,7 +1216,7 @@ ScriptedImporter:
         width: 21
         height: 21
       spriteId: 156fc2be925b844448db57eeb1f8f56d
-    - name: TravelBookAnimated_Frame_20
+    - name: Frame_20
       frameIndex: 20
       additiveSortOrder: 0
       cellRect:
@@ -1219,7 +1225,7 @@ ScriptedImporter:
         width: 14
         height: 16
       spriteId: b1b42894a61a1034b8b5cbcac12d01a8
-    - name: TravelBookAnimated_Frame_21
+    - name: Frame_21
       frameIndex: 21
       additiveSortOrder: 0
       cellRect:
@@ -1228,7 +1234,7 @@ ScriptedImporter:
         width: 14
         height: 14
       spriteId: 9c2f1d9ca1680504d9c07bb82643bdcc
-    - name: TravelBookAnimated_Frame_22
+    - name: Frame_22
       frameIndex: 22
       additiveSortOrder: 0
       cellRect:
@@ -1237,7 +1243,7 @@ ScriptedImporter:
         width: 14
         height: 16
       spriteId: 84fbe2a089bb61c40a614ac1b2cc1117
-    - name: TravelBookAnimated_Frame_23
+    - name: Frame_23
       frameIndex: 23
       additiveSortOrder: 0
       cellRect:
@@ -1246,7 +1252,7 @@ ScriptedImporter:
         width: 5
         height: 5
       spriteId: 62ca8b60a3e2b0645ba8e79486f08a9b
-    - name: TravelBookAnimated_Frame_24
+    - name: Frame_24
       frameIndex: 24
       additiveSortOrder: 0
       cellRect:
@@ -1255,7 +1261,7 @@ ScriptedImporter:
         width: 5
         height: 5
       spriteId: a5b4715a0238caf4295a2f1e6803a436
-    - name: TravelBookAnimated_Frame_25
+    - name: Frame_25
       frameIndex: 25
       additiveSortOrder: 0
       cellRect:
@@ -1264,7 +1270,7 @@ ScriptedImporter:
         width: 5
         height: 3
       spriteId: e70bfdeb3e7bcec4399268cd72068ee1
-    - name: TravelBookAnimated_Frame_26
+    - name: Frame_26
       frameIndex: 26
       additiveSortOrder: 0
       cellRect:
@@ -1273,7 +1279,7 @@ ScriptedImporter:
         width: 5
         height: 3
       spriteId: 3c42ecf869abb9945ae06e569c75449f
-    - name: TravelBookAnimated_Frame_27
+    - name: Frame_27
       frameIndex: 27
       additiveSortOrder: 0
       cellRect:
@@ -1282,7 +1288,7 @@ ScriptedImporter:
         width: 3
         height: 6
       spriteId: ad5f4044de76c1443b03eee94cf074c1
-    - name: TravelBookAnimated_Frame_28
+    - name: Frame_28
       frameIndex: 28
       additiveSortOrder: 0
       cellRect:
@@ -1291,7 +1297,7 @@ ScriptedImporter:
         width: 3
         height: 6
       spriteId: a56529d9befdbb942b657605cb1263be
-    - name: TravelBookAnimated_Frame_29
+    - name: Frame_29
       frameIndex: 29
       additiveSortOrder: 0
       cellRect:
@@ -1300,7 +1306,7 @@ ScriptedImporter:
         width: 3
         height: 6
       spriteId: 272bd81b17172ce4690e13bd872774bf
-    - name: TravelBookAnimated_Frame_30
+    - name: Frame_30
       frameIndex: 30
       additiveSortOrder: 0
       cellRect:
@@ -1309,7 +1315,7 @@ ScriptedImporter:
         width: 3
         height: 6
       spriteId: feefcea0f7a68114da47e2a63ba50595
-    - name: TravelBookAnimated_Frame_31
+    - name: Frame_31
       frameIndex: 31
       additiveSortOrder: 0
       cellRect:
@@ -1318,7 +1324,7 @@ ScriptedImporter:
         width: 5
         height: 7
       spriteId: 2aae15f9ba5517e40a1f34373b5b8b79
-    - name: TravelBookAnimated_Frame_32
+    - name: Frame_32
       frameIndex: 32
       additiveSortOrder: 0
       cellRect:
@@ -1327,7 +1333,7 @@ ScriptedImporter:
         width: 5
         height: 7
       spriteId: aca52034f02005540a549b885e56163c
-    - name: TravelBookAnimated_Frame_33
+    - name: Frame_33
       frameIndex: 33
       additiveSortOrder: 0
       cellRect:
@@ -1336,7 +1342,7 @@ ScriptedImporter:
         width: 5
         height: 7
       spriteId: e727b50a72992c042be58545960f543e
-    - name: TravelBookAnimated_Frame_34
+    - name: Frame_34
       frameIndex: 34
       additiveSortOrder: 0
       cellRect:
@@ -1345,7 +1351,7 @@ ScriptedImporter:
         width: 5
         height: 7
       spriteId: daaf45af54ef6df4dada4b1a047001bd
-    - name: TravelBookAnimated_Frame_35
+    - name: Frame_35
       frameIndex: 35
       additiveSortOrder: 0
       cellRect:
@@ -1354,7 +1360,7 @@ ScriptedImporter:
         width: 5
         height: 9
       spriteId: 09c66ed73cbbda34bb22b0666789bca8
-    - name: TravelBookAnimated_Frame_36
+    - name: Frame_36
       frameIndex: 36
       additiveSortOrder: 0
       cellRect:
@@ -1363,7 +1369,7 @@ ScriptedImporter:
         width: 5
         height: 11
       spriteId: 19599e00fd5ceff4296d044e288ae974
-    - name: TravelBookAnimated_Frame_37
+    - name: Frame_37
       frameIndex: 37
       additiveSortOrder: 0
       cellRect:
@@ -1372,7 +1378,7 @@ ScriptedImporter:
         width: 5
         height: 12
       spriteId: d4d91585faf054d4ba2fb77216340cab
-    - name: TravelBookAnimated_Frame_38
+    - name: Frame_38
       frameIndex: 38
       additiveSortOrder: 0
       cellRect:
@@ -1381,7 +1387,7 @@ ScriptedImporter:
         width: 5
         height: 8
       spriteId: a89c49595300b4040bb93477d0a07a28
-    - name: TravelBookAnimated_Frame_39
+    - name: Frame_39
       frameIndex: 39
       additiveSortOrder: 0
       cellRect:
@@ -1390,7 +1396,7 @@ ScriptedImporter:
         width: 9
         height: 11
       spriteId: 6c5a582e5699e674f9b14e0af138d7e2
-    - name: TravelBookAnimated_Frame_40
+    - name: Frame_40
       frameIndex: 40
       additiveSortOrder: 0
       cellRect:
@@ -1399,7 +1405,7 @@ ScriptedImporter:
         width: 9
         height: 13
       spriteId: 39454bee139ab0047bec111bd4d958de
-    - name: TravelBookAnimated_Frame_41
+    - name: Frame_41
       frameIndex: 41
       additiveSortOrder: 0
       cellRect:
@@ -1408,7 +1414,7 @@ ScriptedImporter:
         width: 9
         height: 14
       spriteId: b5f1e061069a0944ba47744918ca24f2
-    - name: TravelBookAnimated_Frame_42
+    - name: Frame_42
       frameIndex: 42
       additiveSortOrder: 0
       cellRect:
@@ -1417,7 +1423,7 @@ ScriptedImporter:
         width: 5
         height: 10
       spriteId: f293016e47d14c040959453682e54e90
-    - name: TravelBookAnimated_Frame_43
+    - name: Frame_43
       frameIndex: 43
       additiveSortOrder: 0
       cellRect:
@@ -1426,7 +1432,7 @@ ScriptedImporter:
         width: 5
         height: 11
       spriteId: 56ca6db1f30fcdf4191d9dfa825c2ff9
-    - name: TravelBookAnimated_Frame_44
+    - name: Frame_44
       frameIndex: 44
       additiveSortOrder: 0
       cellRect:
@@ -1442,3 +1448,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 96, y: 96}
+  previousTextureSize: {x: 128, y: 256}
