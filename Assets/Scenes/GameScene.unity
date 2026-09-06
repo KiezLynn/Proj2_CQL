@@ -3838,7 +3838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &918297789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7986,8 +7986,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42eb17a65b5297b4caef8f674c6582f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientButtonPrefab: {fileID: 0}
-  ingredientGrid: {fileID: 0}
+  ingredientButtonPrefab: {fileID: 645891846}
+  ingredientGrid: {fileID: 645891847}
   successRateText: {fileID: 0}
   makeButton: {fileID: 259553617}
   serveButton: {fileID: 383770476}

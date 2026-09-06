@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage05
   m_EditorClassIdentifier: 
-  beverageName: 05
+  beverageName: Resolve
   ingredientIcon: {fileID: 21300000, guid: d0cd32b0cd241b64faab640d86f0ed27, type: 3}
   price: 100
-  description: 05
+  description: Don't always be trapped in the guilt brought by choices. Coexist with
+    difficult choices and reach reconciliation with regrettable facts.
