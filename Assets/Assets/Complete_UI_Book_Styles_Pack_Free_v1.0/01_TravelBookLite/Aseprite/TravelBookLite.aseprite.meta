@@ -7,8 +7,7 @@ ScriptedImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
-  importerVersion: 2
+  script: {instanceID: 0}
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -121,55 +120,11 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
-  animatedSpriteImportData:
-  - name: TravelBookLite
-    originalName: 
-    pivot: {x: 0.5671642, y: 0.25417766}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 536
-      height: 1137
-    spriteID: 2510efa48ec5e874b9f1b684548a6a8d
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
+  animatedSpriteImportData: []
   spriteSheetImportData: []
-  asepriteLayers:
-  - layerIndex: 0
-    uuid:
-      value0: 1573219833
-      value1: 0
-      value2: 0
-      value3: 0
-    guid: 1573219833
-    name: TravelBookLite
-    layerFlags: 0
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: TravelBookLite
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 0
-        y: -289
-        width: 536
-        height: 1137
-      spriteId: 2510efa48ec5e874b9f1b684548a6a8d
-    linkedCells: []
-    parentIndex: -1
+  asepriteLayers: []
   platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 608, y: 880}
-  previousTextureSize: {x: 1024, y: 2048}
