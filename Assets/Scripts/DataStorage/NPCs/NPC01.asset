@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Alano
   ingredientIcon: {fileID: 21300000, guid: 6546ac841dd0e224a813aee67c9a8dc5, type: 3}
-  color1: 
-  color2: 
-  color3: 
-  flavorRequirement: 2
+  color1: none
+  color2: none
+  color3: none
+  flavorRequirement: 0
   dialogues:
   - speakerName: Alano
     line: "Hey, you're here. \nToday is your first day at work, so there are a few

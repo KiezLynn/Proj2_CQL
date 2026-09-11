@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ingredient15
   m_EditorClassIdentifier: 
   ingredientName: Patron Silver Tequila
-  ingredientIcon: {fileID: 21300000, guid: b73c225e02fc90d4a9d214511ddea415, type: 3}
+  ingredientIcon: {fileID: 21300000, guid: 6362e19f9d7e3ea4c91a1a9d79390505, type: 3}
   category: Base
   color: none
   addPoint: 3

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage00
   m_EditorClassIdentifier: 
-  beverageName: 
-  ingredientIcon: {fileID: 0}
-  price: 0
-  description: 
+  beverageName: "U\u25A1ide\u25A1\u25A1\u25A1fied"
+  ingredientIcon: {fileID: 21300000, guid: 36286a25594c2b04c8659f6d166fe8da, type: 3}
+  price: -50
+  description: Seemingly an unknown product of failure......

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ingredient14
   m_EditorClassIdentifier: 
   ingredientName: Silver Label Tequila
-  ingredientIcon: {fileID: 0}
+  ingredientIcon: {fileID: 21300000, guid: ee147aecd41436b42940ef2ad0d17a32, type: 3}
   category: Base
   color: none
   addPoint: 3

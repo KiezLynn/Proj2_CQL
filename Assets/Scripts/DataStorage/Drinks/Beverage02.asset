@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage02
   m_EditorClassIdentifier: 
-  beverageName: 02
+  beverageName: Unfetter
   ingredientIcon: {fileID: 21300000, guid: ddb42029c94e7a245b116a123dbbda81, type: 3}
-  price: 100
-  description: 02
+  price: 200
+  description: Break free from the moral coercion of familial bonds and shed the
+    life plans imposed upon you by others.

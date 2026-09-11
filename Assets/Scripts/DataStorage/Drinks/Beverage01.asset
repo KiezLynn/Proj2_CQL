@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage01
   m_EditorClassIdentifier: 
-  beverageName: 01
+  beverageName: Absolve
   ingredientIcon: {fileID: 21300000, guid: 84d019e9cb7f9d242b11fb4a0d7263d3, type: 3}
-  price: 100
-  description: 01
+  price: 175
+  description: Forgive yourself. No longer continue to judge and harshly criticize
+    the naive self of the past, let go of the obsession with nothingness. Learn to
+    enjoy the present and no longer worry unnecessarily.

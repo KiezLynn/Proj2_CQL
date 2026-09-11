@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage03
   m_EditorClassIdentifier: 
-  beverageName: 03
+  beverageName: Catharsis
   ingredientIcon: {fileID: 21300000, guid: c0b8f790190e5c34686a315169e9e1d6, type: 3}
-  price: 100
-  description: 03
+  price: 278
+  description: Trapped by the brutal truth, suppressed anger and confusion were unleashed
+    through alcohol, ultimately achieving inner reconciliation.

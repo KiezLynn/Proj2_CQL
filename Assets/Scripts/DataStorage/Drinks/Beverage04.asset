@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
   m_Name: Beverage04
   m_EditorClassIdentifier: 
-  beverageName: 04
+  beverageName: Revive
   ingredientIcon: {fileID: 21300000, guid: 44d903dea91a41c42b1abb40ee6e2889, type: 3}
-  price: 100
-  description: 04
+  price: 150
+  description: Revive the extinguished brilliance. The once-sharp spirit, long suppressed
+    and sealed away, slowly awakens the intrinsic worth within.

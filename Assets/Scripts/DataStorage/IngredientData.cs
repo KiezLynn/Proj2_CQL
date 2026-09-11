@@ -12,5 +12,5 @@ public class IngredientData : ScriptableObject
     public string color;//颜色属性（用于UI显示）
     public int addPoint;//加点值
     public int flavorIntensity;//口味强度（0-10）
-    [TextArea] public string description;//说明
+    //[TextArea] public string description;//说明
 }

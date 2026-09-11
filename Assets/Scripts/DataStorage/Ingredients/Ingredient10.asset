@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ingredient10
   m_EditorClassIdentifier: 
   ingredientName: Bacardi white rum
-  ingredientIcon: {fileID: 21300000, guid: 45d63f1d858b4e04faa3590b9e5dedca, type: 3}
+  ingredientIcon: {fileID: 21300000, guid: 30af65ae5e0b88c4a853c74098f6d740, type: 3}
   category: Base
   color: none
   addPoint: 3
