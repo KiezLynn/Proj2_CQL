@@ -20,8 +20,8 @@ MonoBehaviour:
   flavorRequirement: 0
   dialogues:
   - speakerName: Alano
-    line: "Hey, you're here. \nToday is your first day at work, so there are a few
-      things I need to mention to you beforehand..."
+    line: "Hey, you're here. \r\n<color=red>Today</color> is your <color=yellow>first
+      day</color> at work, so there are a few things I need to mention to you beforehand..."
     hasOptions: 0
     optionTexts: []
     nextNodeIndex0: 1
