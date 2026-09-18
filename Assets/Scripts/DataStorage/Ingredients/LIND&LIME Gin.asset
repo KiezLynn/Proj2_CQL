@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9db46b8817078bc428eea1a65df15896, type: 3}
-  m_Name: Whisky
+  m_Name: LIND&LIME Gin
   m_EditorClassIdentifier: 
-  ingredientName: Whisky
-  ingredientIcon: {fileID: 21300000, guid: 07ddbfd2db6b1ea4794b25513b49d62e, type: 3}
+  ingredientName: LIND&LIME Gin
+  ingredientIcon: {fileID: 21300000, guid: 5076f1e830d2a6f40a55a4e4f6c98ac5, type: 3}
   category: 0
   color: 0
-  cost: 75
-  addPoint: 8
+  cost: 150
+  addPoint: 6

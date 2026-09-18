@@ -14,14 +14,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Ione
   ingredientIcon: {fileID: 21300000, guid: b4853f6eb0639c34797b667f786ab302, type: 3}
-  color1: blue
-  color2: yellow
-  color3: 
-  flavorRequirement: 4
+  colors: 0200000003000000
+  flavorRequirement: 6
   dialogues:
   - speakerName: Ione
-    line: 'test test test test test test test test '
-    hasOptions: 0
-    optionTexts: []
-    nextNodeIndex0: -1
+    line: "...Sorry about not to order that quickly.I just...a bit tired\uFF0Cbut<color
+      = blue>I don't know who to talk to about</color>\u3002"
+    hasOptions: 1
+    optionTexts:
+    - You alright?
+    - I'm listening.
+    nextNodeIndex0: 1
     nextNodeIndex1: 0
+  - speakerName: Ione
+    line: I have been living alone for a long time now, and I don't want my family
+      to think that 'girls can only rely on others'. I have to rely on my own strength
+      to survive, but <color = yellow> the life has been crushing me.</color>
+    hasOptions: 1
+    optionTexts:
+    - I understand.
+    - Just relax.
+    nextNodeIndex0: 2
+    nextNodeIndex1: 0
+  - speakerName: Ione
+    line: ...could you give me a cup with a <i>low alcohol content and more bubbles,
+      a bit sour. </i> I don't want to get drunk. I have to work tomorrow.
+    hasOptions: 1
+    optionTexts:
+    - Sure.
+    - Please wait on.
+    nextNodeIndex0: 3
+    nextNodeIndex1: 0
+  - speakerName: Ione
+    line: Oh, wow. After drinking this cup, I seem to have regained my energy. Cool!
+    hasOptions: 1
+    optionTexts:
+    - Wonderful!
+    - Anything else I can do for you?
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  - speakerName: Ione
+    line: Well, it's not great... I feel a bit dizzy. I may need to rest for a while.
+    hasOptions: 1
+    optionTexts:
+    - Sorry for that...
+    - Anything else I can do for you?
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  - speakerName: Ione
+    line: I think I might have another drink...
+    hasOptions: 1
+    optionTexts:
+    - Cool.
+    - It'll be right out.
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  - speakerName: Ione
+    line: I think that's all I need for today. Thanks!
+    hasOptions: 1
+    optionTexts:
+    - Thank you for your custom.
+    - Have a nice day!
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1

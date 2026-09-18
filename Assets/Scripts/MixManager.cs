@@ -87,22 +87,22 @@ public class MixManager : MonoBehaviour
         int total = 0;
         foreach (var ing in GameManager.Instance.selectedIngredients)
         {
-            total += ing.addPoint;
+            // total += ing.addPoint;
         }
 
         // 获取顾客需求（保底为1，防止新手引导NPC需求为0时出现除以0的报错）
-        int req = GameManager.Instance.currentNPC.flavorRequirement;
-        if (req <= 0) req = 1; 
+        // int req = GameManager.Instance.currentNPC.flavorRequirement;
+        // if (req <= 0) req = 1; 
 
         // 计算比例并限制在 0~1 之间
-        float rate = total / (float)req;
-        rate = Mathf.Clamp01(rate);
-        
-        Debug.Log($"req: {req} , rate: {rate}");
+        // float rate = total / (float)req;
+        // rate = Mathf.Clamp01(rate);
+        //
+        // Debug.Log($"req: {req} , rate: {rate}");
         
         // 刷新 UI
-        successRateText.text = $"{rate * 100:F0}%";
-        GameManager.Instance.successRate = rate;
+        // successRateText.text = $"{rate * 100:F0}%";
+        // GameManager.Instance.successRate = rate;
     }
 
     // 玩家点击右下角的摇酒壶【MakeBT】

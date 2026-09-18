@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // 必须引入 TextMeshPro 命名空间
 
 public class DialogueManager : MonoBehaviour
 {
-    public Text npcNameText;
-    public Text dialogueText;
+    [Header("UI References")]
+    // 将原先的 Text 替换为 TextMeshProUGUI
+    public TextMeshProUGUI npcNameText;
+    public TextMeshProUGUI dialogueText;
     public Button optionButton1, optionButton2;
     public CanvasGroup npcCanvasGroup;
-    // 用于绑定并修改NPC的立绘组件
     public Image npcImage;
 
     private Coroutine typingCoroutine;
-    private Coroutine autoAdvanceCoroutine; // 用于管理自动播放协程
+    private Coroutine autoAdvanceCoroutine;
     private NPCData currentNPC;
-    private DialogueNode currentNode;       // 记录当前对话节点
+    private DialogueNode currentNode;
     private int currentIndex;
 
-    private bool isTyping = false;          // 标记当前是否正在打字
-    private string currentFullText = "";    // 记录当前句子的完整文本
+    private bool isTyping = false;
 
     private void Start()
     {
@@ -39,8 +40,6 @@ public class DialogueManager : MonoBehaviour
         if (npcImage != null && currentNPC.ingredientIcon != null)
         {
             npcImage.sprite = currentNPC.ingredientIcon;
-            // 可选：如果每个NPC画幅大小不同，可以取消下面这行的注释来让图片恢复原始比例
-            npcImage.SetNativeSize(); 
         }
         npcCanvasGroup.alpha = 0;
 
@@ -51,78 +50,91 @@ public class DialogueManager : MonoBehaviour
     void ShowDialogueNode(DialogueNode node)
     {
         currentNode = node;
-        currentFullText = node.line;
         npcNameText.text = node.speakerName;
 
-        // 隐藏选项，等打字结束后再显示
         optionButton1.gameObject.SetActive(false);
         optionButton2.gameObject.SetActive(false);
 
-        // 停止上一次可能遗留的协程，防止文字跳动或跳转冲突
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
         if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
 
-        typingCoroutine = StartCoroutine(TypeText(currentFullText));
+        typingCoroutine = StartCoroutine(TypeText(node.line));
     }
 
-    // 提供给外部（如对话框背景Button）点击的公共方法
     public void OnDialogueClicked()
     {
         if (isTyping)
         {
-            // 如果正在打字，打断打字协程，直接显示全部
+            // 打断打字，直接显示全部
             if (typingCoroutine != null) StopCoroutine(typingCoroutine);
             CompleteTyping();
         }
         else if (currentNode != null && !currentNode.hasOptions)
         {
-            // 如果打字已经完成且当前无选项，再次点击直接跳过等待，进入下一句
+            // 已经是全显示状态，直接进入下一句
             if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
             AdvanceToNextNode();
         }
     }
 
+    // --- 核心修改：使用 TextMeshPro 的 maxVisibleCharacters 机制 ---
     IEnumerator TypeText(string fullText)
     {
         isTyping = true;
-        dialogueText.text = "";
+        
+        // 1. 先把完整文本赋给组件
+        dialogueText.text = fullText;
+        
+        // 2. 将可见字符设为0，相当于隐藏全部文本
+        dialogueText.maxVisibleCharacters = 0;
+        
+        // 3. 强制更新网格，这样TMP会自动解析富文本，并计算出真正的可见字符总数
+        dialogueText.ForceMeshUpdate();
 
-        foreach (char c in fullText)
+        // 4. 获取纯文本的可见字符总数（不包含富文本标签）
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+        int visibleCount = 0;
+
+        // 5. 逐字增加可见字符数
+        while (visibleCount < totalVisibleCharacters)
         {
-            dialogueText.text += c;
-            yield return new WaitForSeconds(0.05f);
+            visibleCount++;
+            dialogueText.maxVisibleCharacters = visibleCount;
+            yield return new WaitForSeconds(0.05f); // 每个字的间隔时间
         }
 
         CompleteTyping();
     }
 
-    // 打字完成后的统一处理逻辑
     void CompleteTyping()
     {
         isTyping = false;
-        dialogueText.text = currentFullText; // 确保文本完整显示无遗漏
+        
+        // 确保打断时也能瞬间显示出全部文本
+        dialogueText.maxVisibleCharacters = 99999; 
 
         if (currentNode.hasOptions)
         {
             optionButton1.gameObject.SetActive(true);
             optionButton2.gameObject.SetActive(true);
+            
+            // 注意：如果你的选项按钮子物体也换成了 TextMeshPro，这里需要改成 GetComponentInChildren<TextMeshProUGUI>()
+            // 如果选项还是普通 Text，则保持原样不变
             optionButton1.GetComponentInChildren<Text>().text = currentNode.optionTexts[0];
             optionButton2.GetComponentInChildren<Text>().text = currentNode.optionTexts[1];
         }
         else
         {
-            // 文本完全显示完毕后，开始计算等待时间（例如3秒）
             autoAdvanceCoroutine = StartCoroutine(AutoAdvance());
         }
     }
 
     IEnumerator AutoAdvance()
     {
-        yield return new WaitForSeconds(3f); // 全文显示后的停留等待时间
+        yield return new WaitForSeconds(3f);
         AdvanceToNextNode();
     }
 
-    // 进入下一节点的统一逻辑
     void AdvanceToNextNode()
     {
         int next = currentNode.nextNodeIndex0;
@@ -136,6 +148,28 @@ public class DialogueManager : MonoBehaviour
             ShowDialogueNode(currentNPC.dialogues[currentIndex]);
         }
     }
+    
+    /// <summary>
+    /// 跳转到指定段落
+    /// </summary>
+    /// <param name="targetIndex">段落下标</param>
+    public void JumpToNode(int targetIndex)
+    {
+        if (currentNPC == null || currentNPC.dialogues == null) return;
+
+        if (targetIndex >= 0 && targetIndex < currentNPC.dialogues.Count)
+        {
+            if (typingCoroutine != null) StopCoroutine(typingCoroutine);
+            if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
+
+            currentIndex = targetIndex;
+            ShowDialogueNode(currentNPC.dialogues[currentIndex]);
+        }
+        else
+        {
+            Debug.LogError($"跳转失败：目标段落索引越界。");
+        }
+    }
 
     IEnumerator FadeInNPC(float duration)
     {
@@ -143,19 +177,16 @@ public class DialogueManager : MonoBehaviour
         if (cg == null) yield break;
 
         float timer = 0f;
-        float startAlpha = 0f;
-        float endAlpha = 1f;
-
-        cg.alpha = startAlpha;
+        cg.alpha = 0f;
 
         while (timer < duration)
         {
             timer += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(startAlpha, endAlpha, timer / duration);
+            cg.alpha = Mathf.Lerp(0f, 1f, timer / duration);
             yield return null;
         }
 
-        cg.alpha = endAlpha;
+        cg.alpha = 1f;
     }
 
     public void OnOptionSelected(int option)
