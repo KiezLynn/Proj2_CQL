@@ -2997,7 +2997,7 @@ GameObject:
   - component: {fileID: 628090935}
   - component: {fileID: 628090934}
   m_Layer: 5
-  m_Name: jiu (16)
+  m_Name: Whisky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3206,7 +3206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &645891847
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4417,7 +4417,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &966424359
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5936,7 +5936,7 @@ GameObject:
   - component: {fileID: 1192058963}
   - component: {fileID: 1192058962}
   m_Layer: 5
-  m_Name: jiu
+  m_Name: Bacardi Black Rum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
