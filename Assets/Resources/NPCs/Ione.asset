@@ -19,30 +19,30 @@ MonoBehaviour:
   favoriteBeverage: {fileID: 11400000, guid: c0081eeabe166a048bd6349085beb227, type: 2}
   openingDialogues:
   - speakerName: Ione
-    line: "...Sorry about not to order that quickly.I just...a bit tired\uFF0Cbut<color
-      = blue>I don't know who to talk to about</color>\u3002"
+    line: "...Sorry about not to order that quickly.I just...a bit tired\uFF0Cbut<color=blue>I
+      don't know who to talk to about</color>."
     optionTexts:
     - You alright?
     - I'm listening.
     nextNodeIndex0: 1
-    nextNodeIndex1: 0
+    nextNodeIndex1: 1
   - speakerName: Ione
     line: I have been living alone for a long time now, and I don't want my family
       to think that 'girls can only rely on others'. I have to rely on my own strength
-      to survive, but <color = yellow> the life has been crushing me.</color>
+      to survive, but<color=yellow> the life has been crushing me.</color>
     optionTexts:
     - I understand.
     - Just relax.
     nextNodeIndex0: 2
-    nextNodeIndex1: 0
+    nextNodeIndex1: 2
   - speakerName: Ione
     line: ...could you give me a cup with a <i>low alcohol content and more bubbles,
-      a bit sour. </i> I don't want to get drunk. I have to work tomorrow.
+      a bit sour.</i> I don't want to get drunk. I have to work tomorrow.
     optionTexts:
     - Sure.
     - Please wait on.
     nextNodeIndex0: 3
-    nextNodeIndex1: 0
+    nextNodeIndex1: 3
   satisfiedDialogue:
     speakerName: Ione
     line: Oh, wow. After drinking this cup, I seem to have regained my energy. Cool!

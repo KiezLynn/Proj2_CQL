@@ -14,38 +14,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: Alano
   ingredientIcon: {fileID: 21300000, guid: 6546ac841dd0e224a813aee67c9a8dc5, type: 3}
-  color1: none
-  color2: none
-  color3: none
+  colors: 
   flavorRequirement: 0
-  dialogues:
+  favoriteBeverage: {fileID: 0}
+  openingDialogues:
   - speakerName: Alano
-    line: "Hey, you're here. \r\n<color=red>Today</color> is your <color=yellow>first
-      day</color> at work, so there are a few things I need to mention to you beforehand..."
-    hasOptions: 0
+    line: 'Hey, you''re here.
+
+      Today is your first day at work, so there are
+      a few things I need to mention to you beforehand...'
     optionTexts: []
     nextNodeIndex0: 1
-    nextNodeIndex1: 0
+    nextNodeIndex1: 1
   - speakerName: Alano
-    line: This place is Nocturne Club, where customers come seeking emotional support.
-      This is exactly what attracts our guests.
-    hasOptions: 0
+    line: This place is Nocturne Club, where customers come <color=red>seeking emotional
+      support</color> . This is exactly what attracts our guests.
     optionTexts: []
     nextNodeIndex0: 2
-    nextNodeIndex1: 0
+    nextNodeIndex1: 2
   - speakerName: Alano
-    line: You need to observe their moods and adjust the drinks according to their
-      words. The bartending instructions have been written in the brochure.
-    hasOptions: 0
+    line: You need to <color=red>observe their moods</color> and adjust the drinks
+      <color=red>according to their words</color>. The bartending instructions have
+      been written in the brochure.
     optionTexts: []
     nextNodeIndex0: 3
-    nextNodeIndex1: 0
+    nextNodeIndex1: 3
   - speakerName: Alano
-    line: 'Remember, mood is the key to serving the right drink.  Alright, start
-      your work! '
-    hasOptions: 1
+    line: 'Remember, mood is the key to serving the right drink. \n
+
+      Alright,
+      start your work! '
     optionTexts:
     - Got it!
     - Let's start!
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  satisfiedDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  dissatisfiedDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  refillDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  checkoutDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
     nextNodeIndex0: -1
     nextNodeIndex1: -1
