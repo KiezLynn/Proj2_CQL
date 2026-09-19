@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0210d0ee5454a45458c4a2b90dd9dcbc, type: 3}
-  m_Name: Beverage05
+  m_Name: Resolve
   m_EditorClassIdentifier: 
   beverageName: Resolve
-  ingredientIcon: {fileID: 21300000, guid: d0cd32b0cd241b64faab640d86f0ed27, type: 3}
+  beverageIcon: {fileID: 21300000, guid: d0cd32b0cd241b64faab640d86f0ed27, type: 3}
   price: 260
+  colorTags: 0200000005000000
   description: Don't always be trapped in the guilt brought by choices. Coexist with
     difficult choices and reach reconciliation with regrettable facts.
+  requiredBaseLiquor: 10
+  requiredAdditives:
+  - {fileID: 11400000, guid: 18049db23a7f9e742b3e6d1390691954, type: 2}
+  - {fileID: 11400000, guid: 8bd386cad151d274ea4ae7b8d9f49cab, type: 2}
+  - {fileID: 11400000, guid: 209c70fa1eb21d942a389c0f5a5e3798, type: 2}

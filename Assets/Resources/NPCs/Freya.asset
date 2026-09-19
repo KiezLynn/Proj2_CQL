@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d17792f9694eb0549904178501044064, type: 3}
+  m_Name: Freya
+  m_EditorClassIdentifier: 
+  npcName: Freya
+  ingredientIcon: {fileID: 21300000, guid: 25b8a786b5c5dd64794143d30c9d2c25, type: 3}
+  colors: 
+  flavorRequirement: 5
+  favoriteBeverage: {fileID: 11400000, guid: faf3d90a3ef47c3449b87777f70e08f3, type: 2}
+  openingDialogues: []
+  satisfiedDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  dissatisfiedDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  refillDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
+  checkoutDialogue:
+    speakerName: 
+    line: 
+    optionTexts: []
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1

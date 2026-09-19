@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d17792f9694eb0549904178501044064, type: 3}
-  m_Name: NPC01
+  m_Name: Alano
   m_EditorClassIdentifier: 
   npcName: Alano
   ingredientIcon: {fileID: 21300000, guid: 6546ac841dd0e224a813aee67c9a8dc5, type: 3}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db46b8817078bc428eea1a65df15896, type: 3}
+  m_Name: Orange Juice
+  m_EditorClassIdentifier: 
+  ingredientName: Orange Juice
+  ingredientIcon: {fileID: 21300000, guid: b5c16d9fb2b6ea54faaa0a3b9e5ef8d2, type: 3}
+  category: 1
+  color: 3
+  cost: 0
+  addPoint: 0

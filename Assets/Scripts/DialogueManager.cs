@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // 必须引入 TextMeshPro 命名空间
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
     [Header("UI References")]
-    // 将原先的 Text 替换为 TextMeshProUGUI
     public TextMeshProUGUI npcNameText;
     public TextMeshProUGUI dialogueText;
     public Button optionButton1, optionButton2;
@@ -16,10 +15,11 @@ public class DialogueManager : MonoBehaviour
 
     private Coroutine typingCoroutine;
     private Coroutine autoAdvanceCoroutine;
+    
     private NPCData currentNPC;
     private DialogueNode currentNode;
+    private List<DialogueNode> currentDialogueList; // 当前正在播放的对话列表
     private int currentIndex;
-
     private bool isTyping = false;
 
     private void Start()
@@ -27,24 +27,53 @@ public class DialogueManager : MonoBehaviour
         CanvasGroup cg = GetComponent<CanvasGroup>();
     }
 
-    public void StartDialogue(NPCData npc)
+    // 播放：开局阶段的长对话序列
+    public void StartOpeningDialogue(NPCData npc)
     {
         currentNPC = npc;
+        currentDialogueList = npc.openingDialogues;
         currentIndex = 0;
-        if (currentNPC.dialogues == null || currentNPC.dialogues.Count == 0)
+
+        if (currentDialogueList == null || currentDialogueList.Count == 0)
         {
-            Debug.LogWarning(currentNPC.npcName + " 没有配置任何对话！直接进入调酒。");
+            Debug.LogWarning(currentNPC.npcName + " 没有配置开局对话！");
             GameManager.Instance.EnterMixing();
             return;
         }
-        if (npcImage != null && currentNPC.ingredientIcon != null)
-        {
-            npcImage.sprite = currentNPC.ingredientIcon;
-        }
+
+        UpdateNPCImage();
         npcCanvasGroup.alpha = 0;
 
         StartCoroutine(FadeInNPC(1f));
-        ShowDialogueNode(currentNPC.dialogues[0]);
+        ShowDialogueNode(currentDialogueList[0]);
+    }
+
+    // 播放：结算或状态流转阶段的“单句对话”（如满意、不满意、续杯）
+    public void PlaySingleFeedback(NPCData npc, DialogueNode node)
+    {
+        // 【新增安全校验】：如果传入的节点为空（策划没配），或者这句台词没写内容，直接跳过并触发结束回调
+        if (node == null || string.IsNullOrEmpty(node.line))
+        {
+            Debug.Log($"[{npc.npcName}] 没有配置对应的反馈对话，直接跳过该对话环节。");
+            GameManager.Instance.OnDialogueComplete();
+            return;
+        }
+
+        currentNPC = npc;
+        currentDialogueList = null; // 独立节点，不依赖上下文列表
+        
+        UpdateNPCImage();
+        npcCanvasGroup.alpha = 1; // 确保立绘已经显示
+
+        ShowDialogueNode(node);
+    }
+
+    private void UpdateNPCImage()
+    {
+        if (npcImage != null && currentNPC != null && currentNPC.ingredientIcon != null)
+        {
+            npcImage.sprite = currentNPC.ingredientIcon;
+        }
     }
 
     void ShowDialogueNode(DialogueNode node)
@@ -65,42 +94,32 @@ public class DialogueManager : MonoBehaviour
     {
         if (isTyping)
         {
-            // 打断打字，直接显示全部
             if (typingCoroutine != null) StopCoroutine(typingCoroutine);
             CompleteTyping();
         }
-        else if (currentNode != null && !currentNode.hasOptions)
+        else if (currentNode != null && !currentNode.HasOptions) // 使用优化后的 HasOptions
         {
-            // 已经是全显示状态，直接进入下一句
             if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
             AdvanceToNextNode();
         }
     }
 
-    // --- 核心修改：使用 TextMeshPro 的 maxVisibleCharacters 机制 ---
+    // TMP的富文本打字机效果[cite: 1]
     IEnumerator TypeText(string fullText)
     {
         isTyping = true;
-        
-        // 1. 先把完整文本赋给组件
         dialogueText.text = fullText;
-        
-        // 2. 将可见字符设为0，相当于隐藏全部文本
         dialogueText.maxVisibleCharacters = 0;
-        
-        // 3. 强制更新网格，这样TMP会自动解析富文本，并计算出真正的可见字符总数
         dialogueText.ForceMeshUpdate();
 
-        // 4. 获取纯文本的可见字符总数（不包含富文本标签）
         int totalVisibleCharacters = dialogueText.textInfo.characterCount;
         int visibleCount = 0;
 
-        // 5. 逐字增加可见字符数
         while (visibleCount < totalVisibleCharacters)
         {
             visibleCount++;
             dialogueText.maxVisibleCharacters = visibleCount;
-            yield return new WaitForSeconds(0.05f); // 每个字的间隔时间
+            yield return new WaitForSeconds(0.05f);
         }
 
         CompleteTyping();
@@ -109,19 +128,15 @@ public class DialogueManager : MonoBehaviour
     void CompleteTyping()
     {
         isTyping = false;
-        
-        // 确保打断时也能瞬间显示出全部文本
         dialogueText.maxVisibleCharacters = 99999; 
 
-        if (currentNode.hasOptions)
+        if (currentNode.HasOptions) // 使用优化后的 HasOptions
         {
             optionButton1.gameObject.SetActive(true);
             optionButton2.gameObject.SetActive(true);
             
-            // 注意：如果你的选项按钮子物体也换成了 TextMeshPro，这里需要改成 GetComponentInChildren<TextMeshProUGUI>()
-            // 如果选项还是普通 Text，则保持原样不变
-            optionButton1.GetComponentInChildren<Text>().text = currentNode.optionTexts[0];
-            optionButton2.GetComponentInChildren<Text>().text = currentNode.optionTexts[1];
+            optionButton1.GetComponentInChildren<TextMeshProUGUI>().text = currentNode.optionTexts[0];
+            optionButton2.GetComponentInChildren<TextMeshProUGUI>().text = currentNode.optionTexts[1];
         }
         else
         {
@@ -138,36 +153,31 @@ public class DialogueManager : MonoBehaviour
     void AdvanceToNextNode()
     {
         int next = currentNode.nextNodeIndex0;
-        if (next == -1 || next >= currentNPC.dialogues.Count)
+        
+        // 如果当前是单句反馈（currentDialogueList为null）或者遇到 -1 节点，统一交由 GameManager 处理
+        if (currentDialogueList == null || next == -1 || next >= currentDialogueList.Count)
         {
             GameManager.Instance.OnDialogueComplete();
         }
         else
         {
             currentIndex = next;
-            ShowDialogueNode(currentNPC.dialogues[currentIndex]);
+            ShowDialogueNode(currentDialogueList[currentIndex]);
         }
     }
-    
-    /// <summary>
-    /// 跳转到指定段落
-    /// </summary>
-    /// <param name="targetIndex">段落下标</param>
-    public void JumpToNode(int targetIndex)
+
+    public void OnOptionSelected(int option)
     {
-        if (currentNPC == null || currentNPC.dialogues == null) return;
-
-        if (targetIndex >= 0 && targetIndex < currentNPC.dialogues.Count)
+        int next = option == 0 ? currentNode.nextNodeIndex0 : currentNode.nextNodeIndex1;
+        
+        if (currentDialogueList == null || next == -1 || next >= currentDialogueList.Count)
         {
-            if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-            if (autoAdvanceCoroutine != null) StopCoroutine(autoAdvanceCoroutine);
-
-            currentIndex = targetIndex;
-            ShowDialogueNode(currentNPC.dialogues[currentIndex]);
+            GameManager.Instance.OnDialogueComplete();
         }
         else
         {
-            Debug.LogError($"跳转失败：目标段落索引越界。");
+            currentIndex = next;
+            ShowDialogueNode(currentDialogueList[currentIndex]);
         }
     }
 
@@ -185,21 +195,6 @@ public class DialogueManager : MonoBehaviour
             cg.alpha = Mathf.Lerp(0f, 1f, timer / duration);
             yield return null;
         }
-
         cg.alpha = 1f;
-    }
-
-    public void OnOptionSelected(int option)
-    {
-        int next = option == 0 ? currentNode.nextNodeIndex0 : currentNode.nextNodeIndex1;
-        if (next == -1 || next >= currentNPC.dialogues.Count)
-        {
-            GameManager.Instance.OnDialogueComplete();
-        }
-        else
-        {
-            currentIndex = next;
-            ShowDialogueNode(currentNPC.dialogues[currentIndex]);
-        }
     }
 }

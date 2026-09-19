@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,149 +8,177 @@ public class GameManager : MonoBehaviour
     public MixManager mixManager;
 
     [Header("NPC Settings")]
-    public List<NPCData> customerNPCs;  // 存放所有顾客 NPC（拖入 #1, #2, #3...）
-    private bool isFirstDialogue = true; // 标记是否是引导 NPC 的对话
+    public List<NPCData> customerNPCs;  
+    private bool isFirstDialogue = true; 
 
     [Header("InGame Data")]
-    public NPCData currentNPC;//当前出现的NPC
-    public BeverageData currentBeverage;//当前NPC需要的酒水
-    public List<IngredientData> selectedIngredients = new List<IngredientData>();// 玩家选择的原料列表（最多4个）
+    public NPCData currentNPC; 
+    public BeverageData currentBeverage; // 当前NPC需要的酒水配方
+    public List<IngredientData> selectedIngredients = new List<IngredientData>(); 
 
-    //游戏状态机
     public enum GameState { Dialogue, Mixing, Result }
     public GameState currentState;
+    
+    // 反馈状态枚举与续杯标记
+    public enum FeedbackStage { None, QualityFeedback, RefillFeedback, CheckoutFeedback }
+    public FeedbackStage currentFeedbackStage = FeedbackStage.None;
+    private bool isPlayingFeedback = false; 
+    public bool hasRefilled = false; 
 
-    // 对话进度
-    private int dialogueIndex = 0;
-
-    // 调酒结果
     public int totalPoints = 0;
     public float successRate = 0f;
-
-    // 收入累计
     public int totalEarnings = 0;
-    public bool hasExtraTip = false;
-    public bool wantsAnother = false;
 
     [Header("UI Panel")]
     public GameObject HomePan;
     public GameObject GamePan;
-    public GameObject UIPan;
     public GameObject DialoguePan;
     public GameObject TiaojiuPan;
     public GameObject ResultPan;
     public GameObject Scene01;
     public GameObject Scene02;
 
-    void Awake()
-    {
-        Instance = this;
-    }
+    void Awake() => Instance = this;
 
-    void Start()
-    {
-        StartGame();
-    }
+    void Start() => StartGame();
 
-    // 状态切换方法
-    public void StartGame()
-    {
-        GameInitialize();
-    }
+    public void StartGame() => GameInitialize();
 
-    // 随机获取一个顾客 NPC
     public NPCData GetRandomCustomer()
     {
-        if (customerNPCs == null || customerNPCs.Count == 0)
-        {
-            Debug.LogError("No Customer NPC Data");
-            return null;
-        }
-        int randomIndex = Random.Range(0, customerNPCs.Count);
-        return customerNPCs[randomIndex];
+        if (customerNPCs == null || customerNPCs.Count == 0) return null;
+        return customerNPCs[Random.Range(0, customerNPCs.Count)];
+    }
+
+    public void EvaluateDrinkResult()
+    {
+        currentFeedbackStage = FeedbackStage.QualityFeedback;
+        bool isSatisfied = (successRate >= 0.5f); 
+        
+        if (isSatisfied) EnterFeedback(currentNPC.satisfiedDialogue);
+        else EnterFeedback(currentNPC.dissatisfiedDialogue);
     }
 
     public void OnDialogueComplete()
     {
         if (isFirstDialogue)
         {
-            //随机选顾客
             isFirstDialogue = false;
-            NPCData nextNPC = GetRandomCustomer();
-            if (nextNPC != null)
+            NextCustomer();
+            return;
+        }
+
+        if (isPlayingFeedback)
+        {
+            if (currentFeedbackStage == FeedbackStage.QualityFeedback)
             {
-                currentNPC = nextNPC;
-                EnterDialogue(); //开始顾客的对话
+                // 满意且没续过杯，50%概率触发续杯
+                bool willRefill = (!hasRefilled && successRate >= 0.5f && Random.value > 0.5f); 
+
+                if (willRefill)
+                {
+                    hasRefilled = true; 
+                    currentFeedbackStage = FeedbackStage.RefillFeedback;
+                    EnterFeedback(currentNPC.refillDialogue); 
+                }
+                else
+                {
+                    currentFeedbackStage = FeedbackStage.CheckoutFeedback;
+                    EnterFeedback(currentNPC.checkoutDialogue); 
+                }
+            }
+            else if (currentFeedbackStage == FeedbackStage.RefillFeedback)
+            {
+                currentFeedbackStage = FeedbackStage.None;
+                isPlayingFeedback = false;
+                EnterMixing(); // 续杯再次调酒
+            }
+            else if (currentFeedbackStage == FeedbackStage.CheckoutFeedback)
+            {
+                currentFeedbackStage = FeedbackStage.None;
+                isPlayingFeedback = false;
+                hasRefilled = false; 
+                NextCustomer(); // 换下一位客人
             }
         }
         else
         {
-            //顾客对话结束进入调酒
             EnterMixing();
+        }
+    }
+
+    private void NextCustomer()
+    {
+        NPCData nextNPC = GetRandomCustomer();
+        if (nextNPC != null)
+        {
+            currentNPC = nextNPC;
+            // 获取并锁定目标客人的偏好酒水
+            currentBeverage = nextNPC.favoriteBeverage; 
+            EnterDialogue();
         }
     }
 
     public void EnterDialogue()
     {
         currentState = GameState.Dialogue;
+        isPlayingFeedback = false; 
+        
         DialoguePan.SetActive(true);
         TiaojiuPan.SetActive(false);
         ResultPan.SetActive(false);
-        // 启动对话（传入当前NPC，从对话列表开头开始）
-        dialogueManager.StartDialogue(currentNPC);
+        
+        dialogueManager.StartOpeningDialogue(currentNPC);
     }
+    
+    public void EnterFeedback(DialogueNode feedbackNode)
+    {
+        currentState = GameState.Dialogue;
+        isPlayingFeedback = true; 
+        
+        Scene01.SetActive(true);
+        Scene02.SetActive(false);
+        DialoguePan.SetActive(true);
+        TiaojiuPan.SetActive(false);
+        ResultPan.SetActive(false);
+
+        dialogueManager.PlaySingleFeedback(currentNPC, feedbackNode);
+    }
+
     public void EnterMixing()
     {
         currentState = GameState.Mixing;
-    
-        // 切换UI面板
         DialoguePan.SetActive(false);
         TiaojiuPan.SetActive(true);
         ResultPan.SetActive(false);
-    
-        // 切换场景背景（隐藏立绘背景，显示调酒桌背景）
         Scene01.SetActive(false);
         Scene02.SetActive(true);
     
-        // 重置原料选择
-        selectedIngredients.Clear();
         mixManager.Initialize();
     }
+    
     public void EnterResult()
     {
+        currentState = GameState.Result;
         ResultPan.SetActive(true);
     }
 
-    //UI切换办法
     void GameInitialize()
     {
-        HomePan.gameObject.SetActive(true);
-        GamePan.gameObject.SetActive(false);
-        ResultPan.gameObject.SetActive(false);
-        Scene01.gameObject.SetActive(false);
-        Scene02.gameObject.SetActive(false);
-        DialoguePan.gameObject.SetActive(false);
-        TiaojiuPan.gameObject.SetActive(false);
+        HomePan.SetActive(true);
+        GamePan.SetActive(false);
+        ResultPan.SetActive(false);
+        Scene01.SetActive(false);
+        Scene02.SetActive(false);
+        DialoguePan.SetActive(false);
+        TiaojiuPan.SetActive(false);
     }
 
     public void inGame()
     {
-        HomePan.gameObject.SetActive(false);
-        GamePan.gameObject.SetActive(true);
-        Scene01.gameObject.SetActive(true);
-        //DialoguePan.gameObject.SetActive(true);
-
-        //Invoke("EnterDialogue", 1f);
+        HomePan.SetActive(false);
+        GamePan.SetActive(true);
+        Scene01.SetActive(true);
         EnterDialogue();
     }
-
-    public void inTiaojiuSet()
-    {
-        Scene01.gameObject.SetActive(false);
-        Scene02.gameObject.SetActive(true);
-        DialoguePan.gameObject.SetActive(false);
-        TiaojiuPan.gameObject.SetActive(true);
-    }
-
-
 }
