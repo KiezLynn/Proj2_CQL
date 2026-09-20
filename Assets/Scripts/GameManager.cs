@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     public NPCData currentNPC; 
     public BeverageData currentBeverage; // 当前NPC需要的酒水配方
     public List<IngredientData> selectedIngredients = new List<IngredientData>(); 
+    
+    [Header("Beverages")]
+    public BeverageData failedBeverage; // 用于存放表示失败的饮品数据（比如“暗黑料理”）
 
     public enum GameState { Dialogue, Mixing, Result }
     public GameState currentState;
