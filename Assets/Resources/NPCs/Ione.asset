@@ -19,8 +19,10 @@ MonoBehaviour:
   favoriteBeverage: {fileID: 11400000, guid: c0081eeabe166a048bd6349085beb227, type: 2}
   openingDialogues:
   - speakerName: Ione
-    line: "...Sorry about not to order that quickly.I just...a bit tired\uFF0Cbut<color=blue>I
-      don't know who to talk to about</color>."
+    line: '
+
+      ...Sorry about not to order that quickly.I just...a bit tired,but<color
+      = blue>I don''t know who to talk to about</color>.'
     optionTexts:
     - You alright?
     - I'm listening.

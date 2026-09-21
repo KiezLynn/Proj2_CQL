@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,27 +6,28 @@ using UnityEngine.UI;
 public class MixManager : MonoBehaviour
 {
     [Header("UI References - Book")]
-    public Button[] slotButtons = new Button[4]; // 既是按钮也是图片载体
-    public Sprite emptySlotSprite;             // 空槽位占位图
+    public Button[] slotButtons = new Button[4]; 
+    public Sprite emptySlotSprite;             
     public TextMeshProUGUI successRateText;            
 
     [Header("UI References - Popup")]
-    public GameObject ingredientPopup; // 弹窗面板
-    public Image popupIcon;            // 弹窗图标
-    public TextMeshProUGUI popupNameText;         // 弹窗名字
-    public TextMeshProUGUI popupPropertyText;     // 弹窗颜色/属性
-    public Image popupColorImage;      // 颜色
-    public Button popupChooseButton;   // 确认添加
-    public Button popupCloseButton;    // 关闭弹窗
+    public GameObject ingredientPopup; 
+    public Image popupIcon;            
+    public TextMeshProUGUI popupNameText;         
+    public TextMeshProUGUI popupPropertyText;     
+    public Image popupColorImage;      
+    public Button popupChooseButton;   
+    public Button popupCloseButton;    
 
     [Header("UI References - Process")]
     public Button makeButton;   
     public GameObject jiuPanel; 
-    public Image resultDrinkImage; // 用于在调酒完成后显示生成的饮品图片
+    public Image resultDrinkImage; 
     public Button remakeButton; 
     public Button serveButton;  
 
     private IngredientData pendingIngredient;
+    private bool isPendingUnlock = false; // 【新增】标记当前弹窗是否为解锁状态
 
     private void Start()
     {
@@ -38,10 +38,9 @@ public class MixManager : MonoBehaviour
         if (popupChooseButton != null) popupChooseButton.onClick.AddListener(ConfirmChooseIngredient);
         if (popupCloseButton != null) popupCloseButton.onClick.AddListener(ClosePopup);
 
-        // 为四个槽位绑定点击取消事件
         for (int i = 0; i < slotButtons.Length; i++)
         {
-            int index = i; // 解决闭包问题
+            int index = i; 
             if (slotButtons[index] != null)
             {
                 slotButtons[index].onClick.AddListener(() => RemoveIngredient(index));
@@ -49,15 +48,11 @@ public class MixManager : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        UpdateSuccessRate();
-    }
-
     public void Initialize()
     {
         GameManager.Instance.selectedIngredients.Clear();
         GameManager.Instance.successRate = 0f;
+        GameManager.Instance.madeBeverage = null;
         pendingIngredient = null;
         
         for (int i = 0; i < slotButtons.Length; i++)
@@ -65,8 +60,8 @@ public class MixManager : MonoBehaviour
             if (slotButtons[i] != null)
             {
                 slotButtons[i].image.sprite = emptySlotSprite;
-                slotButtons[i].image.color = new Color(1, 1, 1, 0); // 隐藏空槽位的颜色或设为透明
-                slotButtons[i].interactable = false; // 空槽位不可点击
+                slotButtons[i].image.color = new Color(1, 1, 1, 0); 
+                slotButtons[i].interactable = false; 
             }
         }
         successRateText.text = "0%";
@@ -83,11 +78,28 @@ public class MixManager : MonoBehaviour
         if (GameManager.Instance.selectedIngredients.Count >= 4) return;
 
         pendingIngredient = ing;
+        // 【新增】判断是否需要解锁
+        isPendingUnlock = !GameManager.Instance.IsIngredientUnlocked(ing);
+
         popupIcon.sprite = ing.ingredientIcon;
         popupNameText.text = ing.ingredientName;
         
+        string catStr = ing.category == IngredientCategory.Base ? "Base" : "Mix";
         string colorStr = ing.color.ToString();
-        popupPropertyText.text = $"[Color] {colorStr}\n[Attr] {ing.addPoint}";
+
+        // 尝试获取按钮文字组件并修改文字
+        TextMeshProUGUI btnText = popupChooseButton.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (isPendingUnlock)
+        {
+            popupPropertyText.text = $"<color=#FF0000>[Unlocked] cost: ${ing.cost}</color>\n[{catStr}] [Color] {colorStr}\n[Attr] {ing.addPoint}";
+            if (btnText != null) btnText.text = "Unlock";
+        }
+        else
+        {
+            popupPropertyText.text = $"[{catStr}] [Color] {colorStr}\n[Attr] {ing.addPoint}";
+            if (btnText != null) btnText.text = "Choose";
+        }
 
         switch (ing.color)
         {
@@ -111,20 +123,38 @@ public class MixManager : MonoBehaviour
 
     void ConfirmChooseIngredient()
     {
-        if (pendingIngredient != null && GameManager.Instance.selectedIngredients.Count < 4)
+        if (pendingIngredient == null) return;
+
+        // 【新增】解锁流程
+        if (isPendingUnlock)
+        {
+            if (GameManager.Instance.UnlockIngredient(pendingIngredient))
+            {
+                Debug.Log($"解锁成功！花费 {pendingIngredient.cost} 元");
+                isPendingUnlock = false; 
+                SelectIngredient(pendingIngredient); // 刷新弹窗为"添加"状态
+            }
+            else
+            {
+                Debug.LogWarning("余额不足，无法解锁！");
+            }
+            return; // 等待玩家再次点击"添加"
+        }
+
+        // 添加材料流程
+        if (GameManager.Instance.selectedIngredients.Count < 4)
         {
             int currentCount = GameManager.Instance.selectedIngredients.Count;
 
-            // 限制: 第一个只能是基酒，后三个只能是配料
             if (currentCount == 0 && pendingIngredient.category != IngredientCategory.Base)
             {
                 Debug.Log("第一个材料必须是基酒！");
-                return; // 可在此处添加UI提示弹窗反馈给玩家
+                return; 
             }
             if (currentCount > 0 && pendingIngredient.category == IngredientCategory.Base)
             {
                 Debug.Log("只能添加一种基酒，请选择配料！");
-                return; // 可在此处添加UI提示弹窗反馈给玩家
+                return; 
             }
 
             GameManager.Instance.selectedIngredients.Add(pendingIngredient);
@@ -133,23 +163,20 @@ public class MixManager : MonoBehaviour
             {
                 slotButtons[currentCount].image.sprite = pendingIngredient.ingredientIcon;
                 slotButtons[currentCount].image.color = new Color(1, 1, 1, 1);
-                slotButtons[currentCount].interactable = true; // 允许被点击取消
+                slotButtons[currentCount].interactable = true; 
             }
             
-            UpdateSuccessRate();
+            UpdateSuccessRate(); // 【修改】仅在添加成功时运算一次
         }
         ClosePopup();
     }
 
-    // 点击槽位取消选择的功能
     public void RemoveIngredient(int index)
     {
         if (index < 0 || index >= GameManager.Instance.selectedIngredients.Count) return;
 
-        // 从列表中移除
         GameManager.Instance.selectedIngredients.RemoveAt(index);
 
-        // 重新刷新槽位UI（往前递补空位）
         for (int i = 0; i < slotButtons.Length; i++)
         {
             if (slotButtons[i] != null)
@@ -168,48 +195,84 @@ public class MixManager : MonoBehaviour
                 }
             }
         }
-
-        UpdateSuccessRate();
+        UpdateSuccessRate(); // 【修改】仅在移除成功时运算一次
     }
 
+    // 【核心修改】严格比对配方以决定最终产出饮品
     void UpdateSuccessRate()
     {
-        BeverageData targetBeverage = GameManager.Instance.currentBeverage;
-        if (targetBeverage == null) return;
-
-        bool hasCorrectBaseLiquor = false;
-        int correctAdditivesCount = 0;
-        List<IngredientData> checkList = new List<IngredientData>(targetBeverage.requiredAdditives);
-
-        foreach (var ing in GameManager.Instance.selectedIngredients)
+        // 还没选满4个，肯定做不出酒，显示 0%
+        if (GameManager.Instance.selectedIngredients.Count < 4)
         {
-            if (ing.category == IngredientCategory.Base) 
+            GameManager.Instance.successRate = 0f;
+            GameManager.Instance.madeBeverage = null;
+            successRateText.text = "0%";
+            return;
+        }
+
+        BeverageData matchedBeverage = null;
+
+        // 遍历所有正常配方库，比对是否严格相符
+        foreach (var bev in GameManager.Instance.allBeverages)
+        {
+            bool baseMatch = false;
+            List<IngredientData> selectedAdds = new List<IngredientData>();
+
+            // 分离基酒与配料
+            foreach (var ing in GameManager.Instance.selectedIngredients)
             {
-                if (ing.addPoint == targetBeverage.requiredBaseLiquor)
-                    hasCorrectBaseLiquor = true;
-            }
-            else
-            {
-                if (checkList.Contains(ing))
+                if (ing.category == IngredientCategory.Base)
                 {
-                    correctAdditivesCount++;
-                    checkList.Remove(ing); 
+                    if (ing.addPoint == bev.requiredBaseLiquor) baseMatch = true;
+                }
+                else
+                {
+                    selectedAdds.Add(ing);
+                }
+            }
+
+            // 如果基酒对上了，且配料数量也一致(3个)
+            if (baseMatch && selectedAdds.Count == bev.requiredAdditives.Count)
+            {
+                // 无序对比配料
+                List<IngredientData> tempReq = new List<IngredientData>(bev.requiredAdditives);
+                bool addMatch = true;
+                foreach (var a in selectedAdds)
+                {
+                    if (tempReq.Contains(a)) tempReq.Remove(a);
+                    else { addMatch = false; break; }
+                }
+
+                if (addMatch && tempReq.Count == 0)
+                {
+                    matchedBeverage = bev; 
+                    break; // 找到了匹配的配方
                 }
             }
         }
 
-        float rate = 0f;
-        if (hasCorrectBaseLiquor && correctAdditivesCount == 3) rate = 0.99f;
-        else if (hasCorrectBaseLiquor || correctAdditivesCount == 3) rate = 0.50f;
-        else rate = 0f;
+        // 评判成功率和生成的酒
+        if (matchedBeverage != null)
+        {
+            GameManager.Instance.madeBeverage = matchedBeverage;
 
-        GameManager.Instance.successRate = rate;
-        successRateText.text = $"{rate * 100:F0}%";
+            if (matchedBeverage == GameManager.Instance.currentBeverage)
+                GameManager.Instance.successRate = 0.99f; // NPC的目标饮品
+            else
+                GameManager.Instance.successRate = 0.50f; // 其他合格的饮品
+        }
+        else
+        {
+            // 配方不对 = 暗黑料理
+            GameManager.Instance.madeBeverage = GameManager.Instance.failedBeverage;
+            GameManager.Instance.successRate = 0f; 
+        }
+
+        successRateText.text = $"{GameManager.Instance.successRate * 100:F0}%";
     }
 
     public void OnMake()
     {
-        // 限制：必须选满 1种基酒 + 3种配料 才可以制作
         if (GameManager.Instance.selectedIngredients.Count < 4)
         {
             Debug.Log("必须选满 1 种基酒和 3 种配料才能开始制作！");
@@ -219,28 +282,10 @@ public class MixManager : MonoBehaviour
         makeButton.interactable = false;
         jiuPanel.SetActive(true);            
         
-        // 显示对应酒的图片
-        if (resultDrinkImage != null)
+        // 【修改】展示我们算出的 madeBeverage
+        if (resultDrinkImage != null && GameManager.Instance.madeBeverage != null)
         {
-            // 如果成功率大于等于50%，显示目标酒的图片
-            if (GameManager.Instance.successRate >= 0.5f && GameManager.Instance.currentBeverage != null)
-            {
-                resultDrinkImage.sprite = GameManager.Instance.currentBeverage.beverageIcon; 
-            }
-            else
-            {
-                // 如果失败（成功率低于50%），需要从某个地方获取表示“失败”的饮品数据
-                // 假设 GameManager 中有一个引用指向一个代表失败的 BeverageData
-                if (GameManager.Instance.failedBeverage != null) 
-                {
-                     resultDrinkImage.sprite = GameManager.Instance.failedBeverage.beverageIcon;
-                }
-                else
-                {
-                    Debug.LogWarning("未配置失败饮品的数据 (GameManager.Instance.failedBeverage)");
-                    // 如果没有配置失败饮品数据，可以考虑在这里隐藏图片或者保持空白
-                }
-            }
+            resultDrinkImage.sprite = GameManager.Instance.madeBeverage.beverageIcon; 
             resultDrinkImage.SetNativeSize();
         }
 
