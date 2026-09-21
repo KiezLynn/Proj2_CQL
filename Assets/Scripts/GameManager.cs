@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TMPro; // 引入文字UI命名空间
+using TMPro; 
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     [Header("InGame Data")]
     public NPCData currentNPC; 
-    public BeverageData currentBeverage; // 当前NPC需要的酒水配方
+    public BeverageData currentBeverage; 
     public List<IngredientData> selectedIngredients = new List<IngredientData>(); 
     
     [Header("Beverages Library")]
@@ -35,22 +35,25 @@ public class GameManager : MonoBehaviour
     public float successRate = 0f;
     public int totalEarnings = 100; // Balance (余额)，初始100
 
-    // 顾客账单临时变量
-    private int currentCustomerIncome = 0; // Income (本单饮品总售价)
-    private int currentCustomerTip = 0;    // Tip (本单小费)
-    
+    // 【修改】当前顾客账单临时变量（用于单次结账计算和飘字，依然每轮归零）
+    private int currentCustomerIncome = 0; 
+    private int currentCustomerTip = 0;    
+
+    // 【新增】全局累计变量（用于UI面板的常驻显示，永不归零）
+    public int accumulatedIncome = 0;
+    public int accumulatedTip = 0;
+
     [Header("Economy UI (UI面板绑定)")]
-    public TextMeshProUGUI balanceText; // 绑定显示 Balance(余额) 的 Text
-    public TextMeshProUGUI incomeText;  // 绑定显示 Income(收入) 的 Text
-    public TextMeshProUGUI tipText;     // 绑定显示 Tip(小费) 的 Text
-    public TextMeshProUGUI totalText;   // 绑定显示 Total(总计) 的 Text
+    public TextMeshProUGUI balanceText; 
+    public TextMeshProUGUI incomeText;  
+    public TextMeshProUGUI tipText;     
+    public TextMeshProUGUI totalText;   
     
     [Header("Floating Animation")]
-    public GameObject floatingTextPrefab; // 飘字预制体
-    public Transform incomeSpawnPoint;    // 收入飘字生成位置（例如绑定在Income Text上）
-    public Transform tipSpawnPoint;       // 小费飘字生成位置（例如绑定在Tip Text上）
+    public GameObject floatingTextPrefab; 
+    public Transform incomeSpawnPoint;    
+    public Transform tipSpawnPoint;       
     
-    // 已解锁的配料列表
     public List<IngredientData> unlockedIngredients = new List<IngredientData>();
     public Action onIngredientUnlocked; 
 
@@ -67,7 +70,7 @@ public class GameManager : MonoBehaviour
 
     void Start() 
     {
-        UpdateEconomyUI(); // 初始化刷新一下金钱显示
+        UpdateEconomyUI(); 
         StartGame();
     }
 
@@ -85,13 +88,11 @@ public class GameManager : MonoBehaviour
         {
             totalEarnings -= ing.cost;
             unlockedIngredients.Add(ing);
-            UpdateEconomyUI(); // 花钱后实时刷新余额UI
+            UpdateEconomyUI(); 
             onIngredientUnlocked?.Invoke(); 
 
-            // 【新增】触发解锁扣除金币的飘字动画
             if (ing.cost > 0)
             {
-                // 直接使用 balanceText.transform 作为生成位置，红色的扣费数字会从余额处往上飘
                 CreateFloatingText($"-{ing.cost}", Color.red, incomeSpawnPoint);
             }
 
@@ -111,16 +112,18 @@ public class GameManager : MonoBehaviour
         currentFeedbackStage = FeedbackStage.QualityFeedback;
         bool isSatisfied = (successRate >= 0.5f); 
         
-        // 1. 读取饮品的标价，加入账单 (如果是暗黑料理，请在它的配置里把 price 设为 0)
+        // 1. 读取饮品的标价
         if (madeBeverage != null)
         {
-            currentCustomerIncome += madeBeverage.price;
+            currentCustomerIncome += madeBeverage.price; // 记录本单
+            accumulatedIncome += madeBeverage.price;     // 【新增】记录至全局历史总额
         }
         
-        // 2. 调出NPC对应饮品，奖励 10 元小费 (失败自然不满足，为0)
+        // 2. 调出NPC对应饮品，奖励 10 元小费
         if (successRate >= 0.99f)
         {
-            currentCustomerTip += 10;
+            currentCustomerTip += 10; // 记录本单
+            accumulatedTip += 10;     // 【新增】记录至全局历史小费
         }
 
         // 3. 实时刷新收银台面板
@@ -143,7 +146,6 @@ public class GameManager : MonoBehaviour
         {
             if (currentFeedbackStage == FeedbackStage.QualityFeedback)
             {
-                // 满意且没续过杯，50%概率触发续杯
                 bool willRefill = (!hasRefilled && successRate >= 0.5f && UnityEngine.Random.value >= 0.5f); 
 
                 if (willRefill)
@@ -166,28 +168,26 @@ public class GameManager : MonoBehaviour
             }
             else if (currentFeedbackStage == FeedbackStage.CheckoutFeedback)
             {
-                // 【最后结账阶段】
-                int total = currentCustomerIncome + currentCustomerTip;
-                totalEarnings += total; 
+                // 【最后结账阶段】余额仅增加本次单客的金额，防止重复加钱
+                int thisOrderTotal = currentCustomerIncome + currentCustomerTip;
+                totalEarnings += thisOrderTotal; 
 
-                // --- 触发动画 ---
-                // 1. 饮品收入飘字
+                // --- 触发动画 --- (依然使用 currentCustomer 的数值显示单次收益)
                 if (currentCustomerIncome > 0)
                 {
                     CreateFloatingText($"+{currentCustomerIncome}", Color.green, incomeSpawnPoint);
                 }
                 else if (currentCustomerIncome < 0)
                 {
-                    CreateFloatingText($"{currentCustomerIncome}", Color.red, incomeSpawnPoint); // 负数(暗黑料理)显示红色
+                    CreateFloatingText($"{currentCustomerIncome}", Color.red, incomeSpawnPoint); 
                 }
 
-                // 2. 小费飘字
                 if (currentCustomerTip > 0)
                 {
-                    CreateFloatingText($"+{currentCustomerTip}", new Color(1f, 0.8f, 0f), tipSpawnPoint); // 小费显示金色
+                    CreateFloatingText($"+{currentCustomerTip}", new Color(1f, 0.8f, 0f), tipSpawnPoint); 
                 }
 
-                Debug.Log($"结账完毕！收入: {currentCustomerIncome}，小费: {currentCustomerTip}，总入账: {total}。当前总余额: {totalEarnings}");
+                Debug.Log($"结账完毕！本单入账: {thisOrderTotal}。当前总余额: {totalEarnings}");
                 UpdateEconomyUI();
 
                 currentFeedbackStage = FeedbackStage.None;
@@ -204,9 +204,10 @@ public class GameManager : MonoBehaviour
 
     private void NextCustomer()
     {
-        // 迎接新客人时，清空账单并刷新UI
+        // 【修改】迎接新客人时，仅清空本单的临时账单，不重置 accumulated 全局累计变量
         currentCustomerIncome = 0;
         currentCustomerTip = 0;
+        
         UpdateEconomyUI();
 
         NPCData nextNPC = GetRandomCustomer();
@@ -218,13 +219,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 统一更新经济系统的数值显示
+    // 【修改】让UI直接读取永不归零的 accumulated 累计变量
     public void UpdateEconomyUI()
     {
         if (balanceText != null) balanceText.text = totalEarnings.ToString();
-        if (incomeText != null) incomeText.text = currentCustomerIncome.ToString();
-        if (tipText != null) tipText.text = currentCustomerTip.ToString();
-        if (totalText != null) totalText.text = (currentCustomerIncome + currentCustomerTip).ToString();
+        if (incomeText != null) incomeText.text = accumulatedIncome.ToString();
+        if (tipText != null) tipText.text = accumulatedTip.ToString();
+        if (totalText != null) totalText.text = (accumulatedIncome + accumulatedTip).ToString();
     }
 
     public void EnterDialogue()
@@ -290,17 +291,13 @@ public class GameManager : MonoBehaviour
         EnterDialogue();
     }
     
-    // 辅助生成飘字的方法
     public void CreateFloatingText(string message, Color color, Transform spawnParent)
     {
         if (floatingTextPrefab == null || spawnParent == null) return;
 
-        // 生成在指定的 UI 父节点下
         GameObject go = Instantiate(floatingTextPrefab, spawnParent);
-        // 重置位置到父节点中心
         go.GetComponent<RectTransform>().anchoredPosition = Vector2.zero; 
         
-        // 【关键修复】强制激活物体，防止预制体默认处于隐藏状态导致协程报错
         go.SetActive(true); 
 
         FloatingText floatingText = go.GetComponent<FloatingText>();

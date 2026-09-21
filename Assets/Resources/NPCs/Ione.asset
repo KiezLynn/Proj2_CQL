@@ -70,7 +70,7 @@ MonoBehaviour:
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   checkoutDialogue:
-    speakerName: 
+    speakerName: Ione
     line: I think that's all I need for today. Thanks!
     optionTexts:
     - Thank you for your custom.
