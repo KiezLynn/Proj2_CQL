@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// ‘› ± √ª”√
 public class GameResultSystm : MonoBehaviour
 {
     public Text resultText;

@@ -1,3 +1,4 @@
+using System.Collections; // 【新增】用于支持协程
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,10 +25,16 @@ public class MixManager : MonoBehaviour
     public GameObject jiuPanel; 
     public Image resultDrinkImage; 
     public Button remakeButton; 
-    public Button serveButton;  
+    public Button serveButton;
+
+    [Header("Warning UI")]
+    // 【修改】直接引用一个文字组件，而不是生成点
+    public GameObject warningTextPanel;
+    public TextMeshProUGUI warningText; 
+    private Coroutine warningCoroutine; // 用于记录当前正在播放的警告动画
 
     private IngredientData pendingIngredient;
-    private bool isPendingUnlock = false; // 【新增】标记当前弹窗是否为解锁状态
+    private bool isPendingUnlock = false; 
 
     private void Start()
     {
@@ -46,6 +53,10 @@ public class MixManager : MonoBehaviour
                 slotButtons[index].onClick.AddListener(() => RemoveIngredient(index));
             }
         }
+
+        // 初始隐藏警告文字
+        if (warningText != null) warningText.gameObject.SetActive(false);
+        if(warningTextPanel) warningTextPanel.SetActive(false);
     }
 
     public void Initialize()
@@ -78,7 +89,6 @@ public class MixManager : MonoBehaviour
         if (GameManager.Instance.selectedIngredients.Count >= 4) return;
 
         pendingIngredient = ing;
-        // 【新增】判断是否需要解锁
         isPendingUnlock = !GameManager.Instance.IsIngredientUnlocked(ing);
 
         popupIcon.sprite = ing.ingredientIcon;
@@ -87,7 +97,6 @@ public class MixManager : MonoBehaviour
         string catStr = ing.category == IngredientCategory.Base ? "Base" : "Mix";
         string colorStr = ing.color.ToString();
 
-        // 尝试获取按钮文字组件并修改文字
         TextMeshProUGUI btnText = popupChooseButton.GetComponentInChildren<TextMeshProUGUI>();
 
         if (isPendingUnlock)
@@ -125,22 +134,22 @@ public class MixManager : MonoBehaviour
     {
         if (pendingIngredient == null) return;
 
-        // 【新增】解锁流程
         if (isPendingUnlock)
         {
             if (GameManager.Instance.UnlockIngredient(pendingIngredient))
             {
                 Debug.Log($"解锁成功！花费 {pendingIngredient.cost} 元");
                 isPendingUnlock = false; 
-                SelectIngredient(pendingIngredient); // 刷新弹窗为"添加"状态
+                SelectIngredient(pendingIngredient); 
             }
             else
             {
-                Debug.LogWarning("余额不足，无法解锁！");
+                // 【修改】调用闪烁警告
+                ShowWarning("Insufficient balance,cannot unlock!");
             }
-            return; // 等待玩家再次点击"添加"
+            return; 
         }
-
+        
         // 添加材料流程
         if (GameManager.Instance.selectedIngredients.Count < 4)
         {
@@ -148,12 +157,14 @@ public class MixManager : MonoBehaviour
 
             if (currentCount == 0 && pendingIngredient.category != IngredientCategory.Base)
             {
-                Debug.Log("第一个材料必须是基酒！");
+                // 调用闪烁警告
+                ShowWarning("The first ingredient must be the base spirit!");
                 return; 
             }
             if (currentCount > 0 && pendingIngredient.category == IngredientCategory.Base)
             {
-                Debug.Log("只能添加一种基酒，请选择配料！");
+                // 调用闪烁警告
+                ShowWarning("You can only add one base spirit. Please select an ingredient!");
                 return; 
             }
 
@@ -166,7 +177,7 @@ public class MixManager : MonoBehaviour
                 slotButtons[currentCount].interactable = true; 
             }
             
-            UpdateSuccessRate(); // 【修改】仅在添加成功时运算一次
+            UpdateSuccessRate(); 
         }
         ClosePopup();
     }
@@ -195,10 +206,9 @@ public class MixManager : MonoBehaviour
                 }
             }
         }
-        UpdateSuccessRate(); // 【修改】仅在移除成功时运算一次
+        UpdateSuccessRate(); 
     }
 
-    // 【核心修改】严格比对配方以决定最终产出饮品
     void UpdateSuccessRate()
     {
         // 还没选满4个，肯定做不出酒，显示 0%
@@ -275,14 +285,14 @@ public class MixManager : MonoBehaviour
     {
         if (GameManager.Instance.selectedIngredients.Count < 4)
         {
-            Debug.Log("必须选满 1 种基酒和 3 种配料才能开始制作！");
+            // 【修改】调用闪烁警告
+            ShowWarning("Please select at least 1 base spirit and 3 ingredients!");
             return;
         }
 
         makeButton.interactable = false;
         jiuPanel.SetActive(true);            
         
-        // 【修改】展示我们算出的 madeBeverage
         if (resultDrinkImage != null && GameManager.Instance.madeBeverage != null)
         {
             resultDrinkImage.sprite = GameManager.Instance.madeBeverage.beverageIcon; 
@@ -295,5 +305,61 @@ public class MixManager : MonoBehaviour
     public void OnServe()
     {
         GameManager.Instance.EvaluateDrinkResult();
+    }
+
+    // ==========================================
+    // 【新增】处理文字闪烁和消失的系统
+    // ==========================================
+    public void ShowWarning(string message)
+    {
+        if (warningText == null) return;
+
+        // 如果当前正在播放其他警告，先强制停止，防止动画冲突
+        if (warningCoroutine != null) 
+        {
+            StopCoroutine(warningCoroutine);
+        }
+        
+        // 开启新的闪烁协程
+        warningCoroutine = StartCoroutine(FlashWarningRoutine(message));
+    }
+
+    private IEnumerator FlashWarningRoutine(string message)
+    {
+        if (warningText)
+        {
+            warningText.text = message;
+            warningText.gameObject.SetActive(true);
+        }
+        if(warningTextPanel) warningTextPanel.SetActive(true);
+        Color c = Color.red; // 警告默认用红色
+
+        // 1. 闪烁阶段 (快速切换透明度，模拟闪烁警报)
+        for (int i = 0; i < 3; i++)
+        {
+            warningText.color = new Color(c.r, c.g, c.b, 1f);   // 亮
+            yield return new WaitForSeconds(0.15f);
+            warningText.color = new Color(c.r, c.g, c.b, 0.2f); // 暗
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        // 2. 停留阶段 (完全高亮停留 1 秒，让玩家看清文字)
+        warningText.color = new Color(c.r, c.g, c.b, 1f);
+        yield return new WaitForSeconds(1.0f);
+
+        // 3. 渐隐消失阶段 (在 0.5 秒内逐渐变透明)
+        float fadeTime = 0.5f;
+        float elapsed = 0f;
+        while (elapsed < fadeTime)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeTime);
+            warningText.color = new Color(c.r, c.g, c.b, alpha);
+            yield return null;
+        }
+
+        // 彻底隐藏
+        if(warningText) warningText.gameObject.SetActive(false);
+        if(warningTextPanel) warningTextPanel.SetActive(false);
     }
 }
