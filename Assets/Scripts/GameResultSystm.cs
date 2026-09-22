@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 // ‘› ± √ª”√
 public class GameResultSystm : MonoBehaviour
@@ -9,6 +11,11 @@ public class GameResultSystm : MonoBehaviour
     public Text resultText;
     public Text earningsText;
     public Button continueButton;
+
+    private void Start()
+    {
+        
+    }
 
     public void ShowResult()
     {

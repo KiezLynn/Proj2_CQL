@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro; 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,6 +50,13 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI tipText;     
     public TextMeshProUGUI totalText;   
     
+    [Header("Pay Bill & Game Over UI")]
+    public GameObject payBillPanel;         // 结算弹框图层
+    public TextMeshProUGUI billSalesText;   // 弹框中的 Sales (Scales) 金额文本
+    public TextMeshProUGUI billTipText;     // 弹框中的 Tip 金额文本
+    public TextMeshProUGUI billTotalText;   // 弹框中的 Total 金额文本
+    public Button billConfirmButton;        // 弹框下方的确认按钮 (打钩按钮)
+    
     [Header("Floating Animation")]
     public GameObject floatingTextPrefab; 
     public Transform incomeSpawnPoint;    
@@ -65,11 +73,21 @@ public class GameManager : MonoBehaviour
     public GameObject ResultPan;
     public GameObject Scene01;
     public GameObject Scene02;
+    
+    public GameObject gameOverPanel;        // GameOver图层
 
     void Awake() => Instance = this;
 
     void Start() 
     {
+        // 【新增】绑定结算按钮点击事件并初始化UI状态
+        if (billConfirmButton != null)
+        {
+            billConfirmButton.onClick.AddListener(OnConfirmBill);
+        }
+        if (payBillPanel != null) payBillPanel.SetActive(false);
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        
         UpdateEconomyUI(); 
         StartGame();
     }
@@ -94,6 +112,12 @@ public class GameManager : MonoBehaviour
             if (ing.cost > 0)
             {
                 CreateFloatingText($"-{ing.cost}", Color.red, incomeSpawnPoint);
+            }
+
+            // 【新增】如果购买材料后余额归零，直接触发 Game Over
+            if (totalEarnings <= 0)
+            {
+                TriggerGameOver();
             }
 
             return true;
@@ -193,13 +217,64 @@ public class GameManager : MonoBehaviour
                 currentFeedbackStage = FeedbackStage.None;
                 isPlayingFeedback = false;
                 hasRefilled = false; 
-                NextCustomer(); 
+                // 【修改】不直接调用 NextCustomer()，而是显示结算账单面板
+                ShowPayBillPanel();
+                // NextCustomer(); 
             }
         }
         else
         {
             EnterMixing();
         }
+    }
+    
+    // ==========================================
+    // 【新增】控制结算弹窗与 GameOver 的专属方法
+    // ==========================================
+    private void ShowPayBillPanel()
+    {
+        if (payBillPanel != null)
+        {
+            payBillPanel.SetActive(true);
+            
+            // 写入本次顾客的账单数据
+            if (billSalesText != null) billSalesText.text = currentCustomerIncome.ToString();
+            if (billTipText != null) billTipText.text = currentCustomerTip.ToString();
+            
+            int total = currentCustomerIncome + currentCustomerTip;
+            if (billTotalText != null) billTotalText.text = total.ToString();
+        }
+        else
+        {
+            // 防止面板未绑定卡死游戏
+            OnConfirmBill();
+        }
+    }
+    
+    private void OnConfirmBill()
+    {
+        // 隐藏账单面板
+        if (payBillPanel != null) payBillPanel.SetActive(false);
+
+        // 【新增】检测余额，若余额小于等于0，触发GameOver，否则迎接下一位客人
+        if (totalEarnings <= 0)
+        {
+            TriggerGameOver();
+        }
+        else
+        {
+            NextCustomer(); 
+        }
+    }
+    
+    private void TriggerGameOver()
+    {
+        Debug.Log("余额不足，Game Over！");
+        if (gameOverPanel != null) gameOverPanel.SetActive(true);
+        
+        // 隐藏其他交互面板防止玩家继续操作
+        DialoguePan.SetActive(false);
+        TiaojiuPan.SetActive(false);
     }
 
     private void NextCustomer()
