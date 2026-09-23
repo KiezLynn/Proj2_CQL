@@ -136,22 +136,18 @@ public class GameManager : MonoBehaviour
         currentFeedbackStage = FeedbackStage.QualityFeedback;
         bool isSatisfied = (successRate >= 0.5f); 
         
-        // 1. 读取饮品的标价
+        // 【修改】这里只记录“本单”应得的钱，不再提前加入全局变量（accumulatedIncome/Tip）
         if (madeBeverage != null)
         {
-            currentCustomerIncome += madeBeverage.price; // 记录本单
-            accumulatedIncome += madeBeverage.price;     // 【新增】记录至全局历史总额
+            currentCustomerIncome += madeBeverage.price; // 仅记录本单
         }
         
-        // 2. 调出NPC对应饮品，奖励 10 元小费
         if (successRate >= 0.99f)
         {
-            currentCustomerTip += 10; // 记录本单
-            accumulatedTip += 10;     // 【新增】记录至全局历史小费
+            currentCustomerTip += 10; // 仅记录本单
         }
 
-        // 3. 实时刷新收银台面板
-        UpdateEconomyUI();
+        // 不在这里调用 UpdateEconomyUI()，因为此时钱还没真正进入玩家口袋
 
         if (isSatisfied) EnterFeedback(currentNPC.satisfiedDialogue);
         else EnterFeedback(currentNPC.dissatisfiedDialogue);
@@ -192,34 +188,14 @@ public class GameManager : MonoBehaviour
             }
             else if (currentFeedbackStage == FeedbackStage.CheckoutFeedback)
             {
-                // 【最后结账阶段】余额仅增加本次单客的金额，防止重复加钱
-                int thisOrderTotal = currentCustomerIncome + currentCustomerTip;
-                totalEarnings += thisOrderTotal; 
-
-                // --- 触发动画 --- (依然使用 currentCustomer 的数值显示单次收益)
-                if (currentCustomerIncome > 0)
-                {
-                    CreateFloatingText($"+{currentCustomerIncome}", Color.green, incomeSpawnPoint);
-                }
-                else if (currentCustomerIncome < 0)
-                {
-                    CreateFloatingText($"{currentCustomerIncome}", Color.red, incomeSpawnPoint); 
-                }
-
-                if (currentCustomerTip > 0)
-                {
-                    CreateFloatingText($"+{currentCustomerTip}", new Color(1f, 0.8f, 0f), tipSpawnPoint); 
-                }
-
-                Debug.Log($"结账完毕！本单入账: {thisOrderTotal}。当前总余额: {totalEarnings}");
-                UpdateEconomyUI();
-
+                // 【修改】原有的结账计算、触发飘字动画、刷新UI逻辑 全部移除，推迟到确认按钮点击后执行。
+                
                 currentFeedbackStage = FeedbackStage.None;
                 isPlayingFeedback = false;
                 hasRefilled = false; 
-                // 【修改】不直接调用 NextCustomer()，而是显示结算账单面板
+                
+                // 直接显示结算账单面板
                 ShowPayBillPanel();
-                // NextCustomer(); 
             }
         }
         else
@@ -256,7 +232,40 @@ public class GameManager : MonoBehaviour
         // 隐藏账单面板
         if (payBillPanel != null) payBillPanel.SetActive(false);
 
-        // 【新增】检测余额，若余额小于等于0，触发GameOver，否则迎接下一位客人
+        // ==========================================
+        // 【新增】在这里（点击确认后）才真正结算金额、触发飘字、更新全局UI
+        // ==========================================
+        
+        // 1. 将本单金额真正加入到全局累计变量中
+        accumulatedIncome += currentCustomerIncome;
+        accumulatedTip += currentCustomerTip;
+        
+        int thisOrderTotal = currentCustomerIncome + currentCustomerTip;
+        totalEarnings += thisOrderTotal; 
+
+        // 2. 触发飘字动画
+        if (currentCustomerIncome > 0)
+        {
+            CreateFloatingText($"+{currentCustomerIncome}", Color.green, incomeSpawnPoint);
+        }
+        else if (currentCustomerIncome < 0)
+        {
+            CreateFloatingText($"{currentCustomerIncome}", Color.red, incomeSpawnPoint); 
+        }
+
+        if (currentCustomerTip > 0)
+        {
+            CreateFloatingText($"+{currentCustomerTip}", new Color(1f, 0.8f, 0f), tipSpawnPoint); 
+        }
+
+        Debug.Log($"结账完毕！本单入账: {thisOrderTotal}。当前总余额: {totalEarnings}");
+        
+        // 3. 刷新UI面板
+        UpdateEconomyUI();
+
+        // ==========================================
+
+        // 检测余额，若余额小于等于0，触发GameOver，否则迎接下一位客人
         if (totalEarnings <= 0)
         {
             TriggerGameOver();
