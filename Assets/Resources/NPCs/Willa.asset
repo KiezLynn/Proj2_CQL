@@ -17,28 +17,71 @@ MonoBehaviour:
   colors: 
   flavorRequirement: 6
   favoriteBeverage: {fileID: 11400000, guid: af97042d08f4f2a43847dcf25c016ff4, type: 2}
-  openingDialogues: []
+  openingDialogues:
+  - speakerName: Willa
+    line: Hey...good evening. I think I need <i>some stronger to clear my mind.</i>
+    optionTexts:
+    - Good evening.
+    - You don't look well.
+    nextNodeIndex0: 0
+    nextNodeIndex1: 0
+  - speakerName: Willa
+    line: "Yeah... \r\n<color=blue>It just sits heavy on me.</color>\r\nWhy do women
+      hurt other women? I'll never get it. My mother-in-law resents me for having
+      a girl. She wants another baby. I refused, and now she criticizes me for everything.
+      I fought about it the other day.\r\n<color=white>Now me and my husband are
+      talking divorce.</color>"
+    optionTexts:
+    - Hard time, right?
+    - Sorry to hear that.
+    nextNodeIndex0: 0
+    nextNodeIndex1: 0
+  - speakerName: Willa
+    line: 'What hurt most, though, was my husband.
+
+      Not once did he speak
+      up for me.
+
+      My daughter is still little. <b>I''m scared the divorce
+      will hurt her...</b>
+
+      But I keep thinking, what good is a father who
+      won''t protect his own family?'
+    optionTexts:
+    - The drink...
+    - Your answer is here
+    nextNodeIndex0: 0
+    nextNodeIndex1: 0
   satisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Willa
+    line: Thanks. This one has calmed me down a lot. I think it's time for me to
+      move on.
+    optionTexts:
+    - Glad you like.
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   dissatisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Willa
+    line: Um Am I drunk? I am even more confused.
+    optionTexts:
+    - Sorry, my fault.
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   refillDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Willa
+    line: Yes please. I really want to try other flavors.
+    optionTexts:
+    - Cool.
+    - Please wait on.
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   checkoutDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Willa
+    line: Thank you, but I need to go back and take care of the child. Goodbye!
+    optionTexts:
+    - Bye!
+    - Have a nice day!
     nextNodeIndex0: -1
     nextNodeIndex1: -1

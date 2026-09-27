@@ -17,28 +17,67 @@ MonoBehaviour:
   colors: 
   flavorRequirement: 9
   favoriteBeverage: {fileID: 11400000, guid: 927d1af3f6b3a064da1e2c9f62bea934, type: 2}
-  openingDialogues: []
+  openingDialogues:
+  - speakerName: Elara
+    line: <color=red>I'm so angry today! </color>Hi, which is the strongest wine
+      here?
+    optionTexts:
+    - Take a sit first.
+    - Have some water?
+    nextNodeIndex0: 1
+    nextNodeIndex1: 1
+  - speakerName: Elara
+    line: <color=red>I hate the company I work at. </color>As I'm the only woman
+      in the team, they marginalized me during group meetings and nobody care about
+      my opinions. When something happened, <color=yellow>they took the blame on
+      me and caused me to have my performance deducted! </color>
+    optionTexts:
+    - Oh no...
+    - That's too bad.
+    nextNodeIndex0: 2
+    nextNodeIndex1: 2
+  - speakerName: Elara
+    line: I went to confront them with my organized work records, but my superiors
+      said I was too sensitive and it must be my problem. <color=yellow>My problem,
+      seriously? </color>Never mind,  <i>give me a cup of tropical fruit.</i>
+    optionTexts:
+    - No problem
+    - It'll be right out.
+    nextNodeIndex0: 3
+    nextNodeIndex1: 3
   satisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
-    nextNodeIndex0: -1
-    nextNodeIndex1: -1
+    speakerName: Elara
+    line: Cool! This cocktail is amazing, it made me think about many things. How
+      could I be discouraged by such a small matter, don't you think?
+    optionTexts:
+    - Totally not!
+    - Have another try?
+    nextNodeIndex0: 1
+    nextNodeIndex1: 1
   dissatisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
-    nextNodeIndex0: -1
-    nextNodeIndex1: -1
+    speakerName: Elara
+    line: Oh Um... Did you give me the wrong drink? I remember that's not what I
+      wanted.
+    optionTexts:
+    - Oh, my fault.
+    - Have another try?
+    nextNodeIndex0: 2
+    nextNodeIndex1: 2
   refillDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Elara
+    line: Sure, why not? Forget about those annoying things, let's have a great drink
+      today!
+    optionTexts:
+    - Cool!
+    - Here we go!
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   checkoutDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Elara
+    line: Of course I want to, but I'm afraid I have to deal with those annoying
+      things. You know, work work work!
+    optionTexts:
+    - Well, good luck.
+    - Have a nice day!
     nextNodeIndex0: -1
     nextNodeIndex1: -1

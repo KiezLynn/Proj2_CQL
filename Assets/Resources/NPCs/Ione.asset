@@ -48,7 +48,7 @@ MonoBehaviour:
     line: Oh, wow. After drinking this cup, I seem to have regained my energy. Cool!
     optionTexts:
     - Wonderful!
-    - Anything else I can do for you?
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   dissatisfiedDialogue:
@@ -56,7 +56,7 @@ MonoBehaviour:
     line: Well, it's not great... I feel a bit dizzy. I may need to rest for a while.
     optionTexts:
     - Sorry for that...
-    - Anything else I can do for you?
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   refillDialogue:
