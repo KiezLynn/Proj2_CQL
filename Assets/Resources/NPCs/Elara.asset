@@ -43,8 +43,8 @@ MonoBehaviour:
     optionTexts:
     - No problem
     - It'll be right out.
-    nextNodeIndex0: 3
-    nextNodeIndex1: 3
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
   satisfiedDialogue:
     speakerName: Elara
     line: Cool! This cocktail is amazing, it made me think about many things. How

@@ -41,8 +41,8 @@ MonoBehaviour:
     optionTexts:
     - Sure.
     - Please wait on.
-    nextNodeIndex0: 3
-    nextNodeIndex1: 3
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
   satisfiedDialogue:
     speakerName: Ione
     line: Oh, wow. After drinking this cup, I seem to have regained my energy. Cool!

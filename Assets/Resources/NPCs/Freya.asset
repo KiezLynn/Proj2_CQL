@@ -17,28 +17,61 @@ MonoBehaviour:
   colors: 
   flavorRequirement: 5
   favoriteBeverage: {fileID: 11400000, guid: faf3d90a3ef47c3449b87777f70e08f3, type: 2}
-  openingDialogues: []
+  openingDialogues:
+  - speakerName: Freya
+    line: hi, is there anything here that can cheer me up?
+    optionTexts:
+    - Yeah, sure.
+    - Wanna drink?
+    nextNodeIndex0: 1
+    nextNodeIndex1: 1
+  - speakerName: Freya
+    line: Well, work has eaten up all my time. I have no energy for dating.But my
+      parents keep <color=yellow>nagging me to marry.</color> They said I should
+      quit my job and find a good man instead. <color=red>We fought about it. Badly.</color>
+    optionTexts:
+    - Oh wow...
+    - What a mess...
+    nextNodeIndex0: 2
+    nextNodeIndex1: 2
+  - speakerName: Freya
+    line: ...But that's not the real reason.In college, there was a guy I liked.
+      He got handsy as we got closer. I refused him, he got mad and humiliated me.<color=blue>That
+      word still sticks with me.</color>.I just want to escape from this situation..
+    optionTexts:
+    - I understand.
+    - Hope this can help.
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
   satisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Freya
+    line: i feel much better now! This cocktail is truly amazing, I appreciate.
+    optionTexts:
+    - That's great!
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   dissatisfiedDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Freya
+    line: The wine is good, but it doesn't seem like it's what I want...
+    optionTexts:
+    - Sorry for that...
+    - Have another try?
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   refillDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Freya
+    line: Okay, I think I can have another round.
+    optionTexts:
+    - Cool.
+    - Just a short wait.
     nextNodeIndex0: -1
     nextNodeIndex1: -1
   checkoutDialogue:
-    speakerName: 
-    line: 
-    optionTexts: []
+    speakerName: Freya
+    line: Thanks but sorry, I'm in a hurry.  Maybe next time?
+    optionTexts:
+    - Certainly.
+    - You're always welcome.
     nextNodeIndex0: -1
     nextNodeIndex1: -1

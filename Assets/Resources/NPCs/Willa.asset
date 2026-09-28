@@ -23,8 +23,8 @@ MonoBehaviour:
     optionTexts:
     - Good evening.
     - You don't look well.
-    nextNodeIndex0: 0
-    nextNodeIndex1: 0
+    nextNodeIndex0: 1
+    nextNodeIndex1: 1
   - speakerName: Willa
     line: "Yeah... \r\n<color=blue>It just sits heavy on me.</color>\r\nWhy do women
       hurt other women? I'll never get it. My mother-in-law resents me for having
@@ -34,24 +34,24 @@ MonoBehaviour:
     optionTexts:
     - Hard time, right?
     - Sorry to hear that.
-    nextNodeIndex0: 0
-    nextNodeIndex1: 0
+    nextNodeIndex0: 2
+    nextNodeIndex1: 2
   - speakerName: Willa
     line: 'What hurt most, though, was my husband.
 
-      Not once did he speak
-      up for me.
+      Not once did he speak up
+      for me.
 
-      My daughter is still little. <b>I''m scared the divorce
-      will hurt her...</b>
+      My daughter is still little. <b>I''m scared the divorce will
+      hurt her...</b>
 
-      But I keep thinking, what good is a father who
-      won''t protect his own family?'
+      But I keep thinking, what good is a father who won''t
+      protect his own family?'
     optionTexts:
     - The drink...
     - Your answer is here
-    nextNodeIndex0: 0
-    nextNodeIndex1: 0
+    nextNodeIndex0: -1
+    nextNodeIndex1: -1
   satisfiedDialogue:
     speakerName: Willa
     line: Thanks. This one has calmed me down a lot. I think it's time for me to
