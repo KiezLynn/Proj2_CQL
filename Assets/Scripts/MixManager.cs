@@ -167,6 +167,12 @@ public class MixManager : MonoBehaviour
                 ShowWarning("You can only add one base spirit. Please select an ingredient!");
                 return; 
             }
+            
+            if (GameManager.Instance.selectedIngredients.Contains(pendingIngredient))
+            {
+                ShowWarning("Cannot select duplicate ingredients!"); // 提示不可重复选择
+                return;
+            }
 
             GameManager.Instance.selectedIngredients.Add(pendingIngredient);
             

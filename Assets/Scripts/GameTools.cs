@@ -16,6 +16,11 @@ public class GameTools : MonoBehaviour
     {
         
     }
+
+    public void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
+    }
     
     /// <summary>
     /// 场景跳转
