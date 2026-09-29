@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [Header("NPC Settings")]
     public List<NPCData> customerNPCs;  
     private bool isFirstDialogue = true; 
+    
+    // 【新增】用于记录当前这一轮还未出场的NPC队列
+    private List<NPCData> upcomingNPCs = new List<NPCData>();
 
     [Header("InGame Data")]
     public NPCData currentNPC; 
@@ -36,11 +39,11 @@ public class GameManager : MonoBehaviour
     public float successRate = 0f;
     public int totalEarnings = 100; // Balance (余额)，初始100
 
-    // 【修改】当前顾客账单临时变量（用于单次结账计算和飘字，依然每轮归零）
+    // 当前顾客账单临时变量（用于单次结账计算和飘字，依然每轮归零）
     private int currentCustomerIncome = 0; 
     private int currentCustomerTip = 0;    
 
-    // 【新增】全局累计变量（用于UI面板的常驻显示，永不归零）
+    // 全局累计变量（用于UI面板的常驻显示，永不归零）
     public int accumulatedIncome = 0;
     public int accumulatedTip = 0;
 
@@ -80,7 +83,6 @@ public class GameManager : MonoBehaviour
 
     void Start() 
     {
-        // 【新增】绑定结算按钮点击事件并初始化UI状态
         if (billConfirmButton != null)
         {
             billConfirmButton.onClick.AddListener(OnConfirmBill);
@@ -114,7 +116,6 @@ public class GameManager : MonoBehaviour
                 CreateFloatingText($"-{ing.cost}", Color.red, incomeSpawnPoint);
             }
 
-            // 【新增】如果购买材料后余额归零，直接触发 Game Over
             if (totalEarnings <= 0)
             {
                 TriggerGameOver();
@@ -125,10 +126,39 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    // 【修改】获取下一个NPC的逻辑
     public NPCData GetRandomCustomer()
     {
         if (customerNPCs == null || customerNPCs.Count == 0) return null;
-        return customerNPCs[UnityEngine.Random.Range(0, customerNPCs.Count)];
+
+        // 如果本轮出场队列为空，则重新填满并打乱顺序
+        if (upcomingNPCs.Count == 0)
+        {
+            ShuffleAndRefillNPCs();
+        }
+
+        // 队列先进先出：取出第一个NPC，然后将其从出场队列中移除
+        NPCData nextNPC = upcomingNPCs[0];
+        upcomingNPCs.RemoveAt(0);
+        return nextNPC;
+    }
+
+    // 【新增】洗牌并重置NPC队列的方法
+    private void ShuffleAndRefillNPCs()
+    {
+        upcomingNPCs.Clear();
+        upcomingNPCs.AddRange(customerNPCs);
+
+        // 使用 Fisher-Yates 洗牌算法随机打乱列表
+        for (int i = upcomingNPCs.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            NPCData temp = upcomingNPCs[i];
+            upcomingNPCs[i] = upcomingNPCs[j];
+            upcomingNPCs[j] = temp;
+        }
+        
+        Debug.Log("所有NPC均已出场，已重新生成随机出场队列！");
     }
 
     public void EvaluateDrinkResult()
@@ -136,7 +166,6 @@ public class GameManager : MonoBehaviour
         currentFeedbackStage = FeedbackStage.QualityFeedback;
         bool isSatisfied = (successRate >= 0.5f); 
         
-        // 【修改】这里只记录“本单”应得的钱，不再提前加入全局变量（accumulatedIncome/Tip）
         if (madeBeverage != null)
         {
             currentCustomerIncome += madeBeverage.price; // 仅记录本单
@@ -146,8 +175,6 @@ public class GameManager : MonoBehaviour
         {
             currentCustomerTip += 10; // 仅记录本单
         }
-
-        // 不在这里调用 UpdateEconomyUI()，因为此时钱还没真正进入玩家口袋
 
         if (isSatisfied) EnterFeedback(currentNPC.satisfiedDialogue);
         else EnterFeedback(currentNPC.dissatisfiedDialogue);
@@ -188,13 +215,10 @@ public class GameManager : MonoBehaviour
             }
             else if (currentFeedbackStage == FeedbackStage.CheckoutFeedback)
             {
-                // 【修改】原有的结账计算、触发飘字动画、刷新UI逻辑 全部移除，推迟到确认按钮点击后执行。
-                
                 currentFeedbackStage = FeedbackStage.None;
                 isPlayingFeedback = false;
                 hasRefilled = false; 
                 
-                // 直接显示结算账单面板
                 ShowPayBillPanel();
             }
         }
@@ -204,16 +228,12 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // ==========================================
-    // 【新增】控制结算弹窗与 GameOver 的专属方法
-    // ==========================================
     private void ShowPayBillPanel()
     {
         if (payBillPanel != null)
         {
             payBillPanel.SetActive(true);
             
-            // 写入本次顾客的账单数据
             if (billSalesText != null) billSalesText.text = currentCustomerIncome.ToString();
             if (billTipText != null) billTipText.text = currentCustomerTip.ToString();
             
@@ -222,28 +242,20 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // 防止面板未绑定卡死游戏
             OnConfirmBill();
         }
     }
     
     private void OnConfirmBill()
     {
-        // 隐藏账单面板
         if (payBillPanel != null) payBillPanel.SetActive(false);
-
-        // ==========================================
-        // 【新增】在这里（点击确认后）才真正结算金额、触发飘字、更新全局UI
-        // ==========================================
         
-        // 1. 将本单金额真正加入到全局累计变量中
         accumulatedIncome += currentCustomerIncome;
         accumulatedTip += currentCustomerTip;
         
         int thisOrderTotal = currentCustomerIncome + currentCustomerTip;
         totalEarnings += thisOrderTotal; 
 
-        // 2. 触发飘字动画
         if (currentCustomerIncome > 0)
         {
             CreateFloatingText($"+{currentCustomerIncome}", Color.green, incomeSpawnPoint);
@@ -260,12 +272,8 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"结账完毕！本单入账: {thisOrderTotal}。当前总余额: {totalEarnings}");
         
-        // 3. 刷新UI面板
         UpdateEconomyUI();
 
-        // ==========================================
-
-        // 检测余额，若余额小于等于0，触发GameOver，否则迎接下一位客人
         if (totalEarnings <= 0)
         {
             TriggerGameOver();
@@ -281,14 +289,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("余额不足，Game Over！");
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         
-        // 隐藏其他交互面板防止玩家继续操作
         DialoguePan.SetActive(false);
         TiaojiuPan.SetActive(false);
     }
 
     private void NextCustomer()
     {
-        // 【修改】迎接新客人时，仅清空本单的临时账单，不重置 accumulated 全局累计变量
         currentCustomerIncome = 0;
         currentCustomerTip = 0;
         
@@ -303,7 +309,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 【修改】让UI直接读取永不归零的 accumulated 累计变量
     public void UpdateEconomyUI()
     {
         if (balanceText != null) balanceText.text = totalEarnings.ToString();
