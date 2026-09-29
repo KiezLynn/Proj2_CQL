@@ -28,7 +28,8 @@ MonoBehaviour:
   - speakerName: Freya
     line: Well, work has eaten up all my time. I have no energy for dating.But my
       parents keep <color=yellow>nagging me to marry.</color> They said I should
-      quit my job and find a good man instead. <color=red>We fought about it. Badly.</color>
+      dress up more beautifully to attract men and get married. <color=red>I couldn't
+      stand this. We fought about it, badly.</color>
     optionTexts:
     - Oh wow...
     - What a mess...
